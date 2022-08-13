@@ -1,0 +1,206 @@
+{
+  "qmk_audio": [
+    {
+      "label": "Audio",
+      "content": [
+        {
+          "label": "General",
+          "content": [
+            {
+              "label": "Audio Enable",
+              "type": "toggle",
+              "content": ["id_qmk_audio_enable", 4, 1]
+            },
+            {
+              "label": "Audio Clicky Enable",
+              "type": "toggle",
+              "content": ["id_qmk_audio_clicky_enable", 4, 2]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "qmk_backlight": [
+    {
+      "label": "Lighting",
+      "content": [
+        {
+          "label": "Backlight",
+          "content": [
+            {
+              "label": "Backlight Brightness",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["id_qmk_backlight_brightness", 1, 1]
+            },
+            {
+              "label": "Backlight Effect",
+              "type": "dropdown",
+              "content": ["id_qmk_backlight_effect", 1, 2],
+              "options": [["Off", 0], ["Breathing", 1]]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "qmk_rgb_matrix": [
+    {
+      "label": "Lighting",
+      "content": [
+        {
+          "label": "Backlight",
+          "content": [
+            {
+              "label": "Brightness",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["id_qmk_rgb_matrix_brightness", 3, 1]
+            },
+            {
+              "label": "Effect",
+              "type": "dropdown",
+              "content": ["id_qmk_rgb_matrix_effect", 3, 2],
+              "options": [
+                ["All Off", 0],
+                ["Solid Color", 1],
+                ["Alphas Mods", 2],
+                ["Gradient Up/Down", 3],
+                ["Gradient Left/Right", 4],
+                ["Breathing", 5],
+                ["Band Sat.", 6],
+                ["Band Val.", 7],
+                ["Pinwheel Sat.", 8],
+                ["Pinwheel Val.", 9],
+                ["Spiral Sat.", 10],
+                ["Spiral Val.", 11],
+                ["Cycle All", 12],
+                ["Cycle Left/Right", 13],
+                ["Cycle Up/Down", 14],
+                ["Cycle Out/In", 15],
+                ["Cycle Out/In Dual", 16],
+                ["Rainbow Moving Chevron", 17],
+                ["Cycle Pinwheel", 18],
+                ["Cycle Spiral", 19],
+                ["Dual Beacon", 20],
+                ["Rainbow Beacon", 21],
+                ["Rainbow Pinwheels", 22],
+                ["Raindrops", 23],
+                ["Jellybean Raindrops", 24],
+                ["Typing Heatmap", 25],
+                ["Digital Rain", 26],
+                ["Solid Reactive Simple", 27],
+                ["Solid Reactive", 28],
+                ["Solid Reactive Wide", 29],
+                ["Solid Reactive Multi Wide", 30],
+                ["Solid Reactive Cross", 31],
+                ["Solid Reactive Multi Cross", 32],
+                ["Solid Reactive Nexus", 33],
+                ["Solid Reactive Multi Nexus", 34],
+                ["Spash", 35],
+                ["Multi Splash", 36],
+                ["Solid Splash", 37],
+                ["Solid Multi Splash", 38]
+              ]
+            },
+            {
+              "showIf": "{id_qmk_rgb_matrix_effect} != 0",
+              "label": "Effect Speed",
+              "type": "range",
+              "options": [0, 3],
+              "content": ["id_qmk_rgb_matrix_effect_speed", 3, 3]
+            },
+            {
+              "content": [
+                {
+                  "label": "Color",
+                  "type": "color",
+                  "content": ["id_qmk_rgb_matrix_color", 3, 4]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "qmk_rgblight": [
+    {
+      "label": "Lighting",
+      "content": [
+        {
+          "label": "Underglow",
+          "content": [
+            {
+              "label": "Brightness",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["id_qmk_rgblight_brightness", 2, 1]
+            },
+            {
+              "label": "Effect",
+              "type": "dropdown",
+              "content": ["id_qmk_rgblight_effect", 2, 2],
+              "options": [
+                ["All Off", 0],
+                ["Solid Color", 1],
+                ["Breathing 1", 2],
+                ["Breathing 2", 3],
+                ["Breathing 3", 4],
+                ["Breathing 4", 5],
+                ["Rainbow Mood 1", 6],
+                ["Rainbow Mood 2", 7],
+                ["Rainbow Mood 3", 8],
+                ["Rainbow Swirl 1", 9],
+                ["Rainbow Swirl 2", 10],
+                ["Rainbow Swirl 3", 11],
+                ["Rainbow Swirl 4", 12],
+                ["Rainbow Swirl 5", 13],
+                ["Rainbow Swirl 6", 14],
+                ["Snake 1", 15],
+                ["Snake 2", 16],
+                ["Snake 3", 17],
+                ["Snake 4", 18],
+                ["Snake 5", 19],
+                ["Snake 6", 20],
+                ["Knight 1", 21],
+                ["Knight 2", 22],
+                ["Knight 3", 23],
+                ["Christmas", 24],
+                ["Gradient 1", 25],
+                ["Gradient 2", 26],
+                ["Gradient 3", 27],
+                ["Gradient 4", 28],
+                ["Gradient 5", 29],
+                ["Gradient 6", 30],
+                ["Gradient 7", 31],
+                ["Gradient 8", 32],
+                ["Gradient 9", 33],
+                ["Gradient 10", 34],
+                ["RGB Test", 35],
+                ["Alternating", 36]
+              ]
+            },
+            {
+              "showIf": "{id_qmk_rgblight_effect} != 0",
+              "label": "Effect Speed",
+              "type": "range",
+              "options": [0, 3],
+              "content": ["id_qmk_rgblight_effect_speed", 2, 3]
+            },
+            {
+              "content": [
+                {
+                  "label": "Color",
+                  "type": "color",
+                  "content": ["id_qmk_rgblight_color", 2, 4]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

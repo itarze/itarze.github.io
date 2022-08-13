@@ -1,0 +1,14 @@
+import styled from "../../../_snowpack/pkg/styled-components.js";
+export const Pane = styled.div`
+  background: var(--gradient);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--gradient);
+`;
+export const CenterPane = styled(Pane)`
+  overflow: auto;
+  display: block;
+`;

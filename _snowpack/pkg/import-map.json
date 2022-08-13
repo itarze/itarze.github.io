@@ -1,0 +1,27 @@
+{
+  "imports": {
+    "@fortawesome/free-solid-svg-icons": "./@fortawesome/free-solid-svg-icons.js",
+    "@fortawesome/react-fontawesome": "./@fortawesome/react-fontawesome.js",
+    "@reduxjs/toolkit": "./@reduxjs/toolkit.js",
+    "@webscopeio/react-textarea-autocomplete": "./@webscopeio/react-textarea-autocomplete.js",
+    "@webscopeio/react-textarea-autocomplete/style.css": "./@webscopeio/react-textarea-autocomplete/style.css",
+    "downshift": "./downshift.js",
+    "json-stringify-pretty-compact": "./json-stringify-pretty-compact.js",
+    "lodash.partition": "./lodash.partition.js",
+    "pelpi": "./pelpi.js",
+    "raf-schd": "./raf-schd.js",
+    "rc-slider": "./rc-slider.js",
+    "rc-slider/assets/index.css": "./rc-slider/assets/index.css",
+    "react": "./react.js",
+    "react-dom": "./react-dom.js",
+    "react-redux": "./react-redux.js",
+    "react-resize-observer-hook": "./react-resize-observer-hook.js",
+    "react-router": "./react-router.js",
+    "react-router-dom": "./react-router-dom.js",
+    "react-select": "./react-select.js",
+    "react-tooltip": "./react-tooltip.js",
+    "styled-components": "./styled-components.js",
+    "use-resize-observer": "./use-resize-observer.js",
+    "via-reader": "./via-reader.js"
+  }
+}

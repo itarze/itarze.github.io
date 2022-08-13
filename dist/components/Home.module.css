@@ -1,0 +1,48 @@
+._container_kcit0_1 h2 {
+  font-size: 2rem;
+}
+._container_kcit0_1 a {
+  font-size: 1.4rem;
+}
+._container_kcit0_1 {
+  flex: 1;
+  overflow: auto;
+}
+._menuContainer_kcit0_14 {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #eaeaea;
+  position: relative;
+  box-shadow: inset #a7a7a7 0 1px 1px;
+}
+._home_kcit0_23 {
+  background: var(--color_jet);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
+}
+._usbError_kcit0_32 {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 650px;
+  text-align: center;
+}
+._usbErrorIcon_kcit0_43 {
+  font-size: 2rem;
+}
+._usbErrorHeading_kcit0_47 {
+  margin: 1rem 0 0;
+}
+._usbErrorWebHIDLink_kcit0_51 {
+  text-decoration: underline;
+}
+*:focus {
+  outline: none;
+}
