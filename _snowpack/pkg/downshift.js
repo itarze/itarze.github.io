@@ -1,4 +1,3 @@
-import {_ as _extends, a as _objectWithoutPropertiesLoose} from "./common/extends-f6c17942.js";
 import {p as propTypes$3} from "./common/index-8ab56611.js";
 import {r as react} from "./common/index-86c632b0.js";
 import {c as createCommonjsModule} from "./common/_commonjsHelpers-8c19dec8.js";
@@ -216,30 +215,34 @@ var __assign = function() {
   };
   return __assign.apply(this, arguments);
 };
-var idCounter = 0;
+let idCounter = 0;
 function noop() {
 }
 function scrollIntoView(node, menuNode) {
   if (!node) {
     return;
   }
-  var actions = computeScrollIntoView(node, {
+  const actions = computeScrollIntoView(node, {
     boundary: menuNode,
     block: "nearest",
     scrollMode: "if-needed"
   });
-  actions.forEach(function(_ref) {
-    var el = _ref.el, top = _ref.top, left = _ref.left;
+  actions.forEach((_ref) => {
+    let {
+      el,
+      top,
+      left
+    } = _ref;
     el.scrollTop = top;
     el.scrollLeft = left;
   });
 }
 function isOrContainsNode(parent, child, environment) {
-  var result = parent === child || child instanceof environment.Node && parent.contains && parent.contains(child);
+  const result = parent === child || child instanceof environment.Node && parent.contains && parent.contains(child);
   return result;
 }
 function debounce(fn, time) {
-  var timeoutId;
+  let timeoutId;
   function cancel() {
     if (timeoutId) {
       clearTimeout(timeoutId);
@@ -250,9 +253,9 @@ function debounce(fn, time) {
       args[_key] = arguments[_key];
     }
     cancel();
-    timeoutId = setTimeout(function() {
+    timeoutId = setTimeout(() => {
       timeoutId = null;
-      fn.apply(void 0, args);
+      fn(...args);
     }, time);
   }
   wrapper.cancel = cancel;
@@ -266,9 +269,9 @@ function callAllEventHandlers() {
     for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
       args[_key3 - 1] = arguments[_key3];
     }
-    return fns.some(function(fn) {
+    return fns.some((fn) => {
       if (fn) {
-        fn.apply(void 0, [event].concat(args));
+        fn(event, ...args);
       }
       return event.preventDownshiftDefault || event.hasOwnProperty("nativeEvent") && event.nativeEvent.preventDownshiftDefault;
     });
@@ -278,8 +281,8 @@ function handleRefs() {
   for (var _len4 = arguments.length, refs = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
     refs[_key4] = arguments[_key4];
   }
-  return function(node) {
-    refs.forEach(function(ref) {
+  return (node) => {
+    refs.forEach((ref) => {
       if (typeof ref === "function") {
         ref(node);
       } else if (ref) {
@@ -292,7 +295,11 @@ function generateId() {
   return String(idCounter++);
 }
 function getA11yStatusMessage$1(_ref2) {
-  var isOpen = _ref2.isOpen, resultCount = _ref2.resultCount, previousResultCount = _ref2.previousResultCount;
+  let {
+    isOpen,
+    resultCount,
+    previousResultCount
+  } = _ref2;
   if (!isOpen) {
     return "";
   }
@@ -305,7 +312,7 @@ function getA11yStatusMessage$1(_ref2) {
   return "";
 }
 function getState(state, props) {
-  return Object.keys(state).reduce(function(prevState, key) {
+  return Object.keys(state).reduce((prevState, key) => {
     prevState[key] = isControlledProp(props, key) ? props[key] : state[key];
     return prevState;
   }, {});
@@ -314,7 +321,10 @@ function isControlledProp(props, key) {
   return props[key] !== void 0;
 }
 function normalizeArrowKey(event) {
-  var key = event.key, keyCode = event.keyCode;
+  const {
+    key,
+    keyCode
+  } = event;
   if (keyCode >= 37 && keyCode <= 40 && key.indexOf("Arrow") !== 0) {
     return "Arrow" + key;
   }
@@ -327,37 +337,37 @@ function getNextWrappingIndex(moveAmount, baseIndex, itemCount, getItemNodeFromI
   if (itemCount === 0) {
     return -1;
   }
-  var itemsLastIndex = itemCount - 1;
+  const itemsLastIndex = itemCount - 1;
   if (typeof baseIndex !== "number" || baseIndex < 0 || baseIndex >= itemCount) {
     baseIndex = moveAmount > 0 ? -1 : itemsLastIndex + 1;
   }
-  var newIndex = baseIndex + moveAmount;
+  let newIndex = baseIndex + moveAmount;
   if (newIndex < 0) {
     newIndex = circular ? itemsLastIndex : 0;
   } else if (newIndex > itemsLastIndex) {
     newIndex = circular ? 0 : itemsLastIndex;
   }
-  var nonDisabledNewIndex = getNextNonDisabledIndex(moveAmount, newIndex, itemCount, getItemNodeFromIndex, circular);
+  const nonDisabledNewIndex = getNextNonDisabledIndex(moveAmount, newIndex, itemCount, getItemNodeFromIndex, circular);
   if (nonDisabledNewIndex === -1) {
     return baseIndex >= itemCount ? -1 : baseIndex;
   }
   return nonDisabledNewIndex;
 }
 function getNextNonDisabledIndex(moveAmount, baseIndex, itemCount, getItemNodeFromIndex, circular) {
-  var currentElementNode = getItemNodeFromIndex(baseIndex);
+  const currentElementNode = getItemNodeFromIndex(baseIndex);
   if (!currentElementNode || !currentElementNode.hasAttribute("disabled")) {
     return baseIndex;
   }
   if (moveAmount > 0) {
-    for (var index = baseIndex + 1; index < itemCount; index++) {
+    for (let index = baseIndex + 1; index < itemCount; index++) {
       if (!getItemNodeFromIndex(index).hasAttribute("disabled")) {
         return index;
       }
     }
   } else {
-    for (var _index = baseIndex - 1; _index >= 0; _index--) {
-      if (!getItemNodeFromIndex(_index).hasAttribute("disabled")) {
-        return _index;
+    for (let index = baseIndex - 1; index >= 0; index--) {
+      if (!getItemNodeFromIndex(index).hasAttribute("disabled")) {
+        return index;
       }
     }
   }
@@ -370,15 +380,13 @@ function targetWithinDownshift(target, downshiftElements, environment, checkActi
   if (checkActiveElement === void 0) {
     checkActiveElement = true;
   }
-  return downshiftElements.some(function(contextNode) {
-    return contextNode && (isOrContainsNode(contextNode, target, environment) || checkActiveElement && isOrContainsNode(contextNode, environment.document.activeElement, environment));
-  });
+  return downshiftElements.some((contextNode) => contextNode && (isOrContainsNode(contextNode, target, environment) || checkActiveElement && isOrContainsNode(contextNode, environment.document.activeElement, environment)));
 }
-var cleanupStatus = debounce(function(documentProp) {
+const cleanupStatus = debounce((documentProp) => {
   getStatusDiv(documentProp).textContent = "";
 }, 500);
 function setStatus(status, documentProp) {
-  var div = getStatusDiv(documentProp);
+  const div = getStatusDiv(documentProp);
   if (!status) {
     return;
   }
@@ -389,7 +397,7 @@ function getStatusDiv(documentProp) {
   if (documentProp === void 0) {
     documentProp = document;
   }
-  var statusDiv = documentProp.getElementById("a11y-status-message");
+  let statusDiv = documentProp.getElementById("a11y-status-message");
   if (statusDiv) {
     return statusDiv;
   }
@@ -411,56 +419,71 @@ function getStatusDiv(documentProp) {
   documentProp.body.appendChild(statusDiv);
   return statusDiv;
 }
-var _excluded$3 = ["isInitialMount", "highlightedIndex", "items", "environment"];
-var dropdownDefaultStateValues = {
+const dropdownDefaultStateValues = {
   highlightedIndex: -1,
   isOpen: false,
   selectedItem: null,
   inputValue: ""
 };
 function callOnChangeProps(action, state, newState) {
-  var props = action.props, type = action.type;
-  var changes = {};
-  Object.keys(state).forEach(function(key) {
+  const {
+    props,
+    type
+  } = action;
+  const changes = {};
+  Object.keys(state).forEach((key) => {
     invokeOnChangeHandler(key, action, state, newState);
     if (newState[key] !== state[key]) {
       changes[key] = newState[key];
     }
   });
   if (props.onStateChange && Object.keys(changes).length) {
-    props.onStateChange(_extends({
-      type
-    }, changes));
+    props.onStateChange({
+      type,
+      ...changes
+    });
   }
 }
 function invokeOnChangeHandler(key, action, state, newState) {
-  var props = action.props, type = action.type;
-  var handler = "on" + capitalizeString(key) + "Change";
+  const {
+    props,
+    type
+  } = action;
+  const handler = "on" + capitalizeString(key) + "Change";
   if (props[handler] && newState[key] !== void 0 && newState[key] !== state[key]) {
-    props[handler](_extends({
-      type
-    }, newState));
+    props[handler]({
+      type,
+      ...newState
+    });
   }
 }
 function stateReducer(s, a) {
   return a.changes;
 }
 function getA11ySelectionMessage(selectionParameters) {
-  var selectedItem = selectionParameters.selectedItem, itemToStringLocal = selectionParameters.itemToString;
+  const {
+    selectedItem,
+    itemToString: itemToStringLocal
+  } = selectionParameters;
   return selectedItem ? itemToStringLocal(selectedItem) + " has been selected." : "";
 }
-var updateA11yStatus = debounce(function(getA11yMessage, document2) {
+const updateA11yStatus = debounce((getA11yMessage, document2) => {
   setStatus(getA11yMessage(), document2);
 }, 200);
-var useIsomorphicLayoutEffect = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined" ? react.useLayoutEffect : react.useEffect;
+const useIsomorphicLayoutEffect = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined" ? react.useLayoutEffect : react.useEffect;
 function useElementIds(_ref) {
-  var _ref$id = _ref.id, id = _ref$id === void 0 ? "downshift-" + generateId() : _ref$id, labelId = _ref.labelId, menuId = _ref.menuId, getItemId = _ref.getItemId, toggleButtonId = _ref.toggleButtonId, inputId = _ref.inputId;
-  var elementIdsRef = react.useRef({
+  let {
+    id = "downshift-" + generateId(),
+    labelId,
+    menuId,
+    getItemId,
+    toggleButtonId,
+    inputId
+  } = _ref;
+  const elementIdsRef = react.useRef({
     labelId: labelId || id + "-label",
     menuId: menuId || id + "-menu",
-    getItemId: getItemId || function(index) {
-      return id + "-item-" + index;
-    },
+    getItemId: getItemId || ((index) => id + "-item-" + index),
     toggleButtonId: toggleButtonId || id + "-toggle-button",
     inputId: inputId || id + "-input"
   });
@@ -482,31 +505,31 @@ function capitalizeString(string) {
   return "" + string.slice(0, 1).toUpperCase() + string.slice(1);
 }
 function useLatestRef(val) {
-  var ref = react.useRef(val);
+  const ref = react.useRef(val);
   ref.current = val;
   return ref;
 }
 function useEnhancedReducer(reducer, initialState, props) {
-  var prevStateRef = react.useRef();
-  var actionRef = react.useRef();
-  var enhancedReducer = react.useCallback(function(state2, action2) {
+  const prevStateRef = react.useRef();
+  const actionRef = react.useRef();
+  const enhancedReducer = react.useCallback((state2, action2) => {
     actionRef.current = action2;
     state2 = getState(state2, action2.props);
-    var changes = reducer(state2, action2);
-    var newState = action2.props.stateReducer(state2, _extends({}, action2, {
+    const changes = reducer(state2, action2);
+    const newState = action2.props.stateReducer(state2, {
+      ...action2,
       changes
-    }));
+    });
     return newState;
   }, [reducer]);
-  var _useReducer = react.useReducer(enhancedReducer, initialState), state = _useReducer[0], dispatch = _useReducer[1];
-  var propsRef = useLatestRef(props);
-  var dispatchWithProps = react.useCallback(function(action2) {
-    return dispatch(_extends({
-      props: propsRef.current
-    }, action2));
-  }, [propsRef]);
-  var action = actionRef.current;
-  react.useEffect(function() {
+  const [state, dispatch] = react.useReducer(enhancedReducer, initialState);
+  const propsRef = useLatestRef(props);
+  const dispatchWithProps = react.useCallback((action2) => dispatch({
+    props: propsRef.current,
+    ...action2
+  }), [propsRef]);
+  const action = actionRef.current;
+  react.useEffect(() => {
     if (action && prevStateRef.current && prevStateRef.current !== state) {
       callOnChangeProps(action, getState(prevStateRef.current, action.props), state);
     }
@@ -514,7 +537,7 @@ function useEnhancedReducer(reducer, initialState, props) {
   }, [state, props, action]);
   return [state, dispatchWithProps];
 }
-var defaultProps$3 = {
+const defaultProps$3 = {
   itemToString,
   stateReducer,
   getA11ySelectionMessage,
@@ -526,9 +549,9 @@ function getDefaultValue$1(props, propKey, defaultStateValues) {
   if (defaultStateValues === void 0) {
     defaultStateValues = dropdownDefaultStateValues;
   }
-  var defaultPropKey = "default" + capitalizeString(propKey);
-  if (defaultPropKey in props) {
-    return props[defaultPropKey];
+  const defaultValue = props["default" + capitalizeString(propKey)];
+  if (defaultValue !== void 0) {
+    return defaultValue;
   }
   return defaultStateValues[propKey];
 }
@@ -536,20 +559,21 @@ function getInitialValue$1(props, propKey, defaultStateValues) {
   if (defaultStateValues === void 0) {
     defaultStateValues = dropdownDefaultStateValues;
   }
-  if (propKey in props) {
-    return props[propKey];
+  const value = props[propKey];
+  if (value !== void 0) {
+    return value;
   }
-  var initialPropKey = "initial" + capitalizeString(propKey);
-  if (initialPropKey in props) {
-    return props[initialPropKey];
+  const initialValue = props["initial" + capitalizeString(propKey)];
+  if (initialValue !== void 0) {
+    return initialValue;
   }
   return getDefaultValue$1(props, propKey, defaultStateValues);
 }
 function getInitialState$2(props) {
-  var selectedItem = getInitialValue$1(props, "selectedItem");
-  var isOpen = getInitialValue$1(props, "isOpen");
-  var highlightedIndex = getInitialValue$1(props, "highlightedIndex");
-  var inputValue = getInitialValue$1(props, "inputValue");
+  const selectedItem = getInitialValue$1(props, "selectedItem");
+  const isOpen = getInitialValue$1(props, "isOpen");
+  const highlightedIndex = getInitialValue$1(props, "highlightedIndex");
+  const inputValue = getInitialValue$1(props, "inputValue");
   return {
     highlightedIndex: highlightedIndex < 0 && selectedItem && isOpen ? props.items.indexOf(selectedItem) : highlightedIndex,
     isOpen,
@@ -558,8 +582,15 @@ function getInitialState$2(props) {
   };
 }
 function getHighlightedIndexOnOpen(props, state, offset, getItemNodeFromIndex) {
-  var items = props.items, initialHighlightedIndex = props.initialHighlightedIndex, defaultHighlightedIndex = props.defaultHighlightedIndex;
-  var selectedItem = state.selectedItem, highlightedIndex = state.highlightedIndex;
+  const {
+    items,
+    initialHighlightedIndex,
+    defaultHighlightedIndex
+  } = props;
+  const {
+    selectedItem,
+    highlightedIndex
+  } = state;
   if (items.length === 0) {
     return -1;
   }
@@ -581,32 +612,28 @@ function getHighlightedIndexOnOpen(props, state, offset, getItemNodeFromIndex) {
   return offset < 0 ? items.length - 1 : 0;
 }
 function useMouseAndTouchTracker(isOpen, downshiftElementRefs, environment, handleBlur) {
-  var mouseAndTouchTrackersRef = react.useRef({
+  const mouseAndTouchTrackersRef = react.useRef({
     isMouseDown: false,
     isTouchMove: false
   });
-  react.useEffect(function() {
-    var onMouseDown = function onMouseDown2() {
+  react.useEffect(() => {
+    const onMouseDown = () => {
       mouseAndTouchTrackersRef.current.isMouseDown = true;
     };
-    var onMouseUp = function onMouseUp2(event) {
+    const onMouseUp = (event) => {
       mouseAndTouchTrackersRef.current.isMouseDown = false;
-      if (isOpen && !targetWithinDownshift(event.target, downshiftElementRefs.map(function(ref) {
-        return ref.current;
-      }), environment)) {
+      if (isOpen && !targetWithinDownshift(event.target, downshiftElementRefs.map((ref) => ref.current), environment)) {
         handleBlur();
       }
     };
-    var onTouchStart = function onTouchStart2() {
+    const onTouchStart = () => {
       mouseAndTouchTrackersRef.current.isTouchMove = false;
     };
-    var onTouchMove = function onTouchMove2() {
+    const onTouchMove = () => {
       mouseAndTouchTrackersRef.current.isTouchMove = true;
     };
-    var onTouchEnd = function onTouchEnd2(event) {
-      if (isOpen && !mouseAndTouchTrackersRef.current.isTouchMove && !targetWithinDownshift(event.target, downshiftElementRefs.map(function(ref) {
-        return ref.current;
-      }), environment, false)) {
+    const onTouchEnd = (event) => {
+      if (isOpen && !mouseAndTouchTrackersRef.current.isTouchMove && !targetWithinDownshift(event.target, downshiftElementRefs.map((ref) => ref.current), environment, false)) {
         handleBlur();
       }
     };
@@ -625,28 +652,38 @@ function useMouseAndTouchTracker(isOpen, downshiftElementRefs, environment, hand
   }, [isOpen, environment]);
   return mouseAndTouchTrackersRef;
 }
-var useGetterPropsCalledChecker = function useGetterPropsCalledChecker2() {
-  return noop;
-};
+let useGetterPropsCalledChecker = () => noop;
 function useA11yMessageSetter(getA11yMessage, dependencyArray, _ref2) {
-  var isInitialMount = _ref2.isInitialMount, highlightedIndex = _ref2.highlightedIndex, items = _ref2.items, environment = _ref2.environment, rest = _objectWithoutPropertiesLoose(_ref2, _excluded$3);
-  react.useEffect(function() {
+  let {
+    isInitialMount,
+    highlightedIndex,
+    items,
+    environment,
+    ...rest
+  } = _ref2;
+  react.useEffect(() => {
     if (isInitialMount || false) {
       return;
     }
-    updateA11yStatus(function() {
-      return getA11yMessage(_extends({
-        highlightedIndex,
-        highlightedItem: items[highlightedIndex],
-        resultCount: items.length
-      }, rest));
-    }, environment.document);
+    updateA11yStatus(() => getA11yMessage({
+      highlightedIndex,
+      highlightedItem: items[highlightedIndex],
+      resultCount: items.length,
+      ...rest
+    }), environment.document);
   }, dependencyArray);
 }
 function useScrollIntoView(_ref3) {
-  var highlightedIndex = _ref3.highlightedIndex, isOpen = _ref3.isOpen, itemRefs = _ref3.itemRefs, getItemNodeFromIndex = _ref3.getItemNodeFromIndex, menuElement = _ref3.menuElement, scrollIntoViewProp = _ref3.scrollIntoView;
-  var shouldScrollRef = react.useRef(true);
-  useIsomorphicLayoutEffect(function() {
+  let {
+    highlightedIndex,
+    isOpen,
+    itemRefs,
+    getItemNodeFromIndex,
+    menuElement,
+    scrollIntoView: scrollIntoViewProp
+  } = _ref3;
+  const shouldScrollRef = react.useRef(true);
+  useIsomorphicLayoutEffect(() => {
     if (highlightedIndex < 0 || !isOpen || !Object.keys(itemRefs.current).length) {
       return;
     }
@@ -658,10 +695,13 @@ function useScrollIntoView(_ref3) {
   }, [highlightedIndex]);
   return shouldScrollRef;
 }
-var useControlPropsValidator = noop;
+let useControlPropsValidator = noop;
 function downshiftCommonReducer(state, action, stateChangeTypes) {
-  var type = action.type, props = action.props;
-  var changes;
+  const {
+    type,
+    props
+  } = action;
+  let changes;
   switch (type) {
     case stateChangeTypes.ItemMouseMove:
       changes = {
@@ -712,7 +752,10 @@ function downshiftCommonReducer(state, action, stateChangeTypes) {
     default:
       throw new Error("Reducer called without proper action type.");
   }
-  return _extends({}, state, changes);
+  return {
+    ...state,
+    ...changes
+  };
 }
 var propTypes$2 = {
   items: propTypes$3.array.isRequired,
@@ -758,31 +801,31 @@ function getA11yStatusMessage(_a) {
     return "No results are available.";
   }
   if (resultCount !== previousResultCount) {
-    return resultCount + " result" + (resultCount === 1 ? " is" : "s are") + " available, use up and down arrow keys to navigate. Press Enter or Space Bar keys to select.";
+    return "".concat(resultCount, " result").concat(resultCount === 1 ? " is" : "s are", " available, use up and down arrow keys to navigate. Press Enter or Space Bar keys to select.");
   }
   return "";
 }
 var defaultProps$2 = __assign(__assign({}, defaultProps$3), {getA11yStatusMessage});
-var InputKeyDownArrowDown = 0;
-var InputKeyDownArrowUp = 1;
-var InputKeyDownEscape = 2;
-var InputKeyDownHome = 3;
-var InputKeyDownEnd = 4;
-var InputKeyDownEnter = 5;
-var InputChange = 6;
-var InputBlur = 7;
-var MenuMouseLeave = 8;
-var ItemMouseMove = 9;
-var ItemClick = 10;
-var ToggleButtonClick = 11;
-var FunctionToggleMenu = 12;
-var FunctionOpenMenu = 13;
-var FunctionCloseMenu = 14;
-var FunctionSetHighlightedIndex = 15;
-var FunctionSelectItem = 16;
-var FunctionSetInputValue = 17;
-var FunctionReset$1 = 18;
-var ControlledPropUpdatedSelectedItem = 19;
+const InputKeyDownArrowDown = 0;
+const InputKeyDownArrowUp = 1;
+const InputKeyDownEscape = 2;
+const InputKeyDownHome = 3;
+const InputKeyDownEnd = 4;
+const InputKeyDownEnter = 5;
+const InputChange = 6;
+const InputBlur = 7;
+const MenuMouseLeave = 8;
+const ItemMouseMove = 9;
+const ItemClick = 10;
+const ToggleButtonClick = 11;
+const FunctionToggleMenu = 12;
+const FunctionOpenMenu = 13;
+const FunctionCloseMenu = 14;
+const FunctionSetHighlightedIndex = 15;
+const FunctionSelectItem = 16;
+const FunctionSetInputValue = 17;
+const FunctionReset$1 = 18;
+const ControlledPropUpdatedSelectedItem = 19;
 var stateChangeTypes$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   InputKeyDownArrowDown,
@@ -807,17 +850,22 @@ var stateChangeTypes$1 = /* @__PURE__ */ Object.freeze({
   ControlledPropUpdatedSelectedItem
 });
 function getInitialState$1(props) {
-  var initialState = getInitialState$2(props);
-  var selectedItem = initialState.selectedItem;
-  var inputValue = initialState.inputValue;
+  const initialState = getInitialState$2(props);
+  const {
+    selectedItem
+  } = initialState;
+  let {
+    inputValue
+  } = initialState;
   if (inputValue === "" && selectedItem && props.defaultInputValue === void 0 && props.initialInputValue === void 0 && props.inputValue === void 0) {
     inputValue = props.itemToString(selectedItem);
   }
-  return _extends({}, initialState, {
+  return {
+    ...initialState,
     inputValue
-  });
+  };
 }
-var propTypes$1 = {
+const propTypes$1 = {
   items: propTypes$3.array.isRequired,
   itemToString: propTypes$3.func,
   getA11yStatusMessage: propTypes$3.func,
@@ -858,9 +906,9 @@ var propTypes$1 = {
   })
 };
 function useControlledReducer(reducer, initialState, props) {
-  var previousSelectedItemRef = react.useRef();
-  var _useEnhancedReducer = useEnhancedReducer(reducer, initialState, props), state = _useEnhancedReducer[0], dispatch = _useEnhancedReducer[1];
-  react.useEffect(function() {
+  const previousSelectedItemRef = react.useRef();
+  const [state, dispatch] = useEnhancedReducer(reducer, initialState, props);
+  react.useEffect(() => {
     if (isControlledProp(props, "selectedItem")) {
       if (previousSelectedItemRef.current !== props.selectedItem) {
         dispatch({
@@ -873,13 +921,18 @@ function useControlledReducer(reducer, initialState, props) {
   });
   return [getState(state, props), dispatch];
 }
-var defaultProps$1 = _extends({}, defaultProps$3, {
+const defaultProps$1 = {
+  ...defaultProps$3,
   getA11yStatusMessage: getA11yStatusMessage$1,
   circularNavigation: true
-});
+};
 function downshiftUseComboboxReducer(state, action) {
-  var type = action.type, props = action.props, shiftKey = action.shiftKey;
-  var changes;
+  const {
+    type,
+    props,
+    shiftKey
+  } = action;
+  let changes;
   switch (type) {
     case ItemClick:
       changes = {
@@ -914,21 +967,24 @@ function downshiftUseComboboxReducer(state, action) {
       }
       break;
     case InputKeyDownEnter:
-      changes = _extends({}, state.isOpen && state.highlightedIndex >= 0 && {
-        selectedItem: props.items[state.highlightedIndex],
-        isOpen: getDefaultValue$1(props, "isOpen"),
-        highlightedIndex: getDefaultValue$1(props, "highlightedIndex"),
-        inputValue: props.itemToString(props.items[state.highlightedIndex])
-      });
+      changes = {
+        ...state.isOpen && state.highlightedIndex >= 0 && {
+          selectedItem: props.items[state.highlightedIndex],
+          isOpen: getDefaultValue$1(props, "isOpen"),
+          highlightedIndex: getDefaultValue$1(props, "highlightedIndex"),
+          inputValue: props.itemToString(props.items[state.highlightedIndex])
+        }
+      };
       break;
     case InputKeyDownEscape:
-      changes = _extends({
+      changes = {
         isOpen: false,
-        highlightedIndex: -1
-      }, !state.isOpen && {
-        selectedItem: null,
-        inputValue: ""
-      });
+        highlightedIndex: -1,
+        ...!state.isOpen && {
+          selectedItem: null,
+          inputValue: ""
+        }
+      };
       break;
     case InputKeyDownHome:
       changes = {
@@ -941,13 +997,14 @@ function downshiftUseComboboxReducer(state, action) {
       };
       break;
     case InputBlur:
-      changes = _extends({
+      changes = {
         isOpen: false,
-        highlightedIndex: -1
-      }, state.highlightedIndex >= 0 && action.selectItem && {
-        selectedItem: props.items[state.highlightedIndex],
-        inputValue: props.itemToString(props.items[state.highlightedIndex])
-      });
+        highlightedIndex: -1,
+        ...state.highlightedIndex >= 0 && action.selectItem && {
+          selectedItem: props.items[state.highlightedIndex],
+          inputValue: props.itemToString(props.items[state.highlightedIndex])
+        }
+      };
       break;
     case InputChange:
       changes = {
@@ -970,49 +1027,68 @@ function downshiftUseComboboxReducer(state, action) {
     default:
       return downshiftCommonReducer(state, action, stateChangeTypes$1);
   }
-  return _extends({}, state, changes);
+  return {
+    ...state,
+    ...changes
+  };
 }
-var _excluded$1 = ["onMouseLeave", "refKey", "ref"], _excluded2$1 = ["item", "index", "refKey", "ref", "onMouseMove", "onClick", "onPress"], _excluded3 = ["onClick", "onPress", "refKey", "ref"], _excluded4 = ["onKeyDown", "onChange", "onInput", "onBlur", "onChangeText", "refKey", "ref"], _excluded5 = ["refKey", "ref"];
 useCombobox.stateChangeTypes = stateChangeTypes$1;
 function useCombobox(userProps) {
   if (userProps === void 0) {
     userProps = {};
   }
-  var props = _extends({}, defaultProps$1, userProps);
-  var initialIsOpen = props.initialIsOpen, defaultIsOpen = props.defaultIsOpen, items = props.items, scrollIntoView2 = props.scrollIntoView, environment = props.environment, getA11yStatusMessage2 = props.getA11yStatusMessage, getA11ySelectionMessage2 = props.getA11ySelectionMessage, itemToString2 = props.itemToString;
-  var initialState = getInitialState$1(props);
-  var _useControlledReducer = useControlledReducer(downshiftUseComboboxReducer, initialState, props), state = _useControlledReducer[0], dispatch = _useControlledReducer[1];
-  var isOpen = state.isOpen, highlightedIndex = state.highlightedIndex, selectedItem = state.selectedItem, inputValue = state.inputValue;
-  var menuRef = react.useRef(null);
-  var itemRefs = react.useRef({});
-  var inputRef = react.useRef(null);
-  var toggleButtonRef = react.useRef(null);
-  var comboboxRef = react.useRef(null);
-  var isInitialMountRef = react.useRef(true);
-  var elementIds = useElementIds(props);
-  var previousResultCountRef = react.useRef();
-  var latest = useLatestRef({
+  const props = {
+    ...defaultProps$1,
+    ...userProps
+  };
+  const {
+    initialIsOpen,
+    defaultIsOpen,
+    items,
+    scrollIntoView: scrollIntoView2,
+    environment,
+    getA11yStatusMessage: getA11yStatusMessage2,
+    getA11ySelectionMessage: getA11ySelectionMessage2,
+    itemToString: itemToString2
+  } = props;
+  const initialState = getInitialState$1(props);
+  const [state, dispatch] = useControlledReducer(downshiftUseComboboxReducer, initialState, props);
+  const {
+    isOpen,
+    highlightedIndex,
+    selectedItem,
+    inputValue
+  } = state;
+  const menuRef = react.useRef(null);
+  const itemRefs = react.useRef({});
+  const inputRef = react.useRef(null);
+  const toggleButtonRef = react.useRef(null);
+  const comboboxRef = react.useRef(null);
+  const isInitialMountRef = react.useRef(true);
+  const elementIds = useElementIds(props);
+  const previousResultCountRef = react.useRef();
+  const latest = useLatestRef({
     state,
     props
   });
-  var getItemNodeFromIndex = react.useCallback(function(index) {
-    return itemRefs.current[elementIds.getItemId(index)];
-  }, [elementIds]);
-  useA11yMessageSetter(getA11yStatusMessage2, [isOpen, highlightedIndex, inputValue, items], _extends({
+  const getItemNodeFromIndex = react.useCallback((index) => itemRefs.current[elementIds.getItemId(index)], [elementIds]);
+  useA11yMessageSetter(getA11yStatusMessage2, [isOpen, highlightedIndex, inputValue, items], {
     isInitialMount: isInitialMountRef.current,
     previousResultCount: previousResultCountRef.current,
     items,
     environment,
-    itemToString: itemToString2
-  }, state));
-  useA11yMessageSetter(getA11ySelectionMessage2, [selectedItem], _extends({
+    itemToString: itemToString2,
+    ...state
+  });
+  useA11yMessageSetter(getA11ySelectionMessage2, [selectedItem], {
     isInitialMount: isInitialMountRef.current,
     previousResultCount: previousResultCountRef.current,
     items,
     environment,
-    itemToString: itemToString2
-  }, state));
-  var shouldScrollRef = useScrollIntoView({
+    itemToString: itemToString2,
+    ...state
+  });
+  const shouldScrollRef = useScrollIntoView({
     menuElement: menuRef.current,
     highlightedIndex,
     isOpen,
@@ -1025,123 +1101,139 @@ function useCombobox(userProps) {
     props,
     state
   });
-  react.useEffect(function() {
-    var focusOnOpen = initialIsOpen || defaultIsOpen || isOpen;
+  react.useEffect(() => {
+    const focusOnOpen = initialIsOpen || defaultIsOpen || isOpen;
     if (focusOnOpen && inputRef.current) {
       inputRef.current.focus();
     }
   }, []);
-  react.useEffect(function() {
+  react.useEffect(() => {
     if (isInitialMountRef.current) {
       return;
     }
     previousResultCountRef.current = items.length;
   });
-  var mouseAndTouchTrackersRef = useMouseAndTouchTracker(isOpen, [comboboxRef, menuRef, toggleButtonRef], environment, function() {
+  const mouseAndTouchTrackersRef = useMouseAndTouchTracker(isOpen, [comboboxRef, menuRef, toggleButtonRef], environment, () => {
     dispatch({
       type: InputBlur,
       selectItem: false
     });
   });
-  var setGetterPropCallInfo = useGetterPropsCalledChecker();
-  react.useEffect(function() {
+  const setGetterPropCallInfo = useGetterPropsCalledChecker();
+  react.useEffect(() => {
     isInitialMountRef.current = false;
   }, []);
-  react.useEffect(function() {
+  react.useEffect(() => {
     if (!isOpen) {
       itemRefs.current = {};
     }
   }, [isOpen]);
-  var inputKeyDownHandlers = react.useMemo(function() {
-    return {
-      ArrowDown: function ArrowDown(event) {
-        event.preventDefault();
+  const inputKeyDownHandlers = react.useMemo(() => ({
+    ArrowDown(event) {
+      event.preventDefault();
+      dispatch({
+        type: InputKeyDownArrowDown,
+        shiftKey: event.shiftKey,
+        getItemNodeFromIndex
+      });
+    },
+    ArrowUp(event) {
+      event.preventDefault();
+      dispatch({
+        type: InputKeyDownArrowUp,
+        shiftKey: event.shiftKey,
+        getItemNodeFromIndex
+      });
+    },
+    Home(event) {
+      if (!latest.current.state.isOpen) {
+        return;
+      }
+      event.preventDefault();
+      dispatch({
+        type: InputKeyDownHome,
+        getItemNodeFromIndex
+      });
+    },
+    End(event) {
+      if (!latest.current.state.isOpen) {
+        return;
+      }
+      event.preventDefault();
+      dispatch({
+        type: InputKeyDownEnd,
+        getItemNodeFromIndex
+      });
+    },
+    Escape() {
+      const latestState = latest.current.state;
+      if (latestState.isOpen || latestState.inputValue || latestState.selectedItem || latestState.highlightedIndex > -1) {
         dispatch({
-          type: InputKeyDownArrowDown,
-          shiftKey: event.shiftKey,
-          getItemNodeFromIndex
-        });
-      },
-      ArrowUp: function ArrowUp(event) {
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownArrowUp,
-          shiftKey: event.shiftKey,
-          getItemNodeFromIndex
-        });
-      },
-      Home: function Home(event) {
-        if (!latest.current.state.isOpen) {
-          return;
-        }
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownHome,
-          getItemNodeFromIndex
-        });
-      },
-      End: function End(event) {
-        if (!latest.current.state.isOpen) {
-          return;
-        }
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownEnd,
-          getItemNodeFromIndex
-        });
-      },
-      Escape: function Escape() {
-        var latestState = latest.current.state;
-        if (latestState.isOpen || latestState.inputValue || latestState.selectedItem || latestState.highlightedIndex > -1) {
-          dispatch({
-            type: InputKeyDownEscape
-          });
-        }
-      },
-      Enter: function Enter(event) {
-        var latestState = latest.current.state;
-        if (!latestState.isOpen || latestState.highlightedIndex < 0 || event.which === 229) {
-          return;
-        }
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownEnter,
-          getItemNodeFromIndex
+          type: InputKeyDownEscape
         });
       }
-    };
-  }, [dispatch, latest, getItemNodeFromIndex]);
-  var getLabelProps = react.useCallback(function(labelProps) {
-    return _extends({
-      id: elementIds.labelId,
-      htmlFor: elementIds.inputId
-    }, labelProps);
-  }, [elementIds]);
-  var getMenuProps = react.useCallback(function(_temp, _temp2) {
-    var _extends2;
-    var _ref = _temp === void 0 ? {} : _temp, onMouseLeave = _ref.onMouseLeave, _ref$refKey = _ref.refKey, refKey = _ref$refKey === void 0 ? "ref" : _ref$refKey, ref = _ref.ref, rest = _objectWithoutPropertiesLoose(_ref, _excluded$1);
-    var _ref2 = _temp2 === void 0 ? {} : _temp2, _ref2$suppressRefErro = _ref2.suppressRefError;
-    return _extends((_extends2 = {}, _extends2[refKey] = handleRefs(ref, function(menuNode) {
-      menuRef.current = menuNode;
-    }), _extends2.id = elementIds.menuId, _extends2.role = "listbox", _extends2["aria-labelledby"] = elementIds.labelId, _extends2.onMouseLeave = callAllEventHandlers(onMouseLeave, function() {
+    },
+    Enter(event) {
+      const latestState = latest.current.state;
+      if (!latestState.isOpen || latestState.highlightedIndex < 0 || event.which === 229) {
+        return;
+      }
+      event.preventDefault();
       dispatch({
-        type: MenuMouseLeave
+        type: InputKeyDownEnter,
+        getItemNodeFromIndex
       });
-    }), _extends2), rest);
+    }
+  }), [dispatch, latest, getItemNodeFromIndex]);
+  const getLabelProps = react.useCallback((labelProps) => ({
+    id: elementIds.labelId,
+    htmlFor: elementIds.inputId,
+    ...labelProps
+  }), [elementIds]);
+  const getMenuProps = react.useCallback(function(_temp, _temp2) {
+    let {
+      onMouseLeave,
+      refKey = "ref",
+      ref,
+      ...rest
+    } = _temp === void 0 ? {} : _temp;
+    return {
+      [refKey]: handleRefs(ref, (menuNode) => {
+        menuRef.current = menuNode;
+      }),
+      id: elementIds.menuId,
+      role: "listbox",
+      "aria-labelledby": elementIds.labelId,
+      onMouseLeave: callAllEventHandlers(onMouseLeave, () => {
+        dispatch({
+          type: MenuMouseLeave
+        });
+      }),
+      ...rest
+    };
   }, [dispatch, setGetterPropCallInfo, elementIds]);
-  var getItemProps = react.useCallback(function(_temp3) {
-    var _extends3, _ref4;
-    var _ref3 = _temp3 === void 0 ? {} : _temp3, item = _ref3.item, index = _ref3.index, _ref3$refKey = _ref3.refKey, refKey = _ref3$refKey === void 0 ? "ref" : _ref3$refKey, ref = _ref3.ref, onMouseMove = _ref3.onMouseMove, onClick = _ref3.onClick;
-    _ref3.onPress;
-    var rest = _objectWithoutPropertiesLoose(_ref3, _excluded2$1);
-    var _latest$current = latest.current, latestProps = _latest$current.props, latestState = _latest$current.state;
-    var itemIndex = getItemIndex(index, item, latestProps.items);
+  const getItemProps = react.useCallback(function(_temp3) {
+    let {
+      item,
+      index,
+      refKey = "ref",
+      ref,
+      onMouseMove,
+      onClick,
+      onPress,
+      ...rest
+    } = _temp3 === void 0 ? {} : _temp3;
+    const {
+      props: latestProps,
+      state: latestState
+    } = latest.current;
+    const itemIndex = getItemIndex(index, item, latestProps.items);
     if (itemIndex < 0) {
       throw new Error("Pass either item or item index in getItemProps!");
     }
-    var onSelectKey = "onClick";
-    var customClickHandler = onClick;
-    var itemHandleMouseMove = function itemHandleMouseMove2() {
+    const onSelectKey = "onClick";
+    const customClickHandler = onClick;
+    const itemHandleMouseMove = () => {
       if (index === latestState.highlightedIndex) {
         return;
       }
@@ -1151,7 +1243,7 @@ function useCombobox(userProps) {
         index
       });
     };
-    var itemHandleClick = function itemHandleClick2() {
+    const itemHandleClick = () => {
       dispatch({
         type: ItemClick,
         index
@@ -1160,20 +1252,31 @@ function useCombobox(userProps) {
         inputRef.current.focus();
       }
     };
-    return _extends((_extends3 = {}, _extends3[refKey] = handleRefs(ref, function(itemNode) {
-      if (itemNode) {
-        itemRefs.current[elementIds.getItemId(itemIndex)] = itemNode;
-      }
-    }), _extends3.role = "option", _extends3["aria-selected"] = "" + (itemIndex === latestState.highlightedIndex), _extends3.id = elementIds.getItemId(itemIndex), _extends3), !rest.disabled && (_ref4 = {
-      onMouseMove: callAllEventHandlers(onMouseMove, itemHandleMouseMove)
-    }, _ref4[onSelectKey] = callAllEventHandlers(customClickHandler, itemHandleClick), _ref4), rest);
+    return {
+      [refKey]: handleRefs(ref, (itemNode) => {
+        if (itemNode) {
+          itemRefs.current[elementIds.getItemId(itemIndex)] = itemNode;
+        }
+      }),
+      role: "option",
+      "aria-selected": "" + (itemIndex === latestState.highlightedIndex),
+      id: elementIds.getItemId(itemIndex),
+      ...!rest.disabled && {
+        onMouseMove: callAllEventHandlers(onMouseMove, itemHandleMouseMove),
+        [onSelectKey]: callAllEventHandlers(customClickHandler, itemHandleClick)
+      },
+      ...rest
+    };
   }, [dispatch, latest, shouldScrollRef, elementIds]);
-  var getToggleButtonProps = react.useCallback(function(_temp4) {
-    var _extends4;
-    var _ref5 = _temp4 === void 0 ? {} : _temp4, onClick = _ref5.onClick;
-    _ref5.onPress;
-    var _ref5$refKey = _ref5.refKey, refKey = _ref5$refKey === void 0 ? "ref" : _ref5$refKey, ref = _ref5.ref, rest = _objectWithoutPropertiesLoose(_ref5, _excluded3);
-    var toggleButtonHandleClick = function toggleButtonHandleClick2() {
+  const getToggleButtonProps = react.useCallback(function(_temp4) {
+    let {
+      onClick,
+      onPress,
+      refKey = "ref",
+      ref,
+      ...rest
+    } = _temp4 === void 0 ? {} : _temp4;
+    const toggleButtonHandleClick = () => {
       dispatch({
         type: ToggleButtonClick
       });
@@ -1181,32 +1284,45 @@ function useCombobox(userProps) {
         inputRef.current.focus();
       }
     };
-    return _extends((_extends4 = {}, _extends4[refKey] = handleRefs(ref, function(toggleButtonNode) {
-      toggleButtonRef.current = toggleButtonNode;
-    }), _extends4.id = elementIds.toggleButtonId, _extends4.tabIndex = -1, _extends4), !rest.disabled && _extends({}, {
-      onClick: callAllEventHandlers(onClick, toggleButtonHandleClick)
-    }), rest);
+    return {
+      [refKey]: handleRefs(ref, (toggleButtonNode) => {
+        toggleButtonRef.current = toggleButtonNode;
+      }),
+      id: elementIds.toggleButtonId,
+      tabIndex: -1,
+      ...!rest.disabled && {
+        ...{
+          onClick: callAllEventHandlers(onClick, toggleButtonHandleClick)
+        }
+      },
+      ...rest
+    };
   }, [dispatch, latest, elementIds]);
-  var getInputProps = react.useCallback(function(_temp5, _temp6) {
-    var _extends5;
-    var _ref6 = _temp5 === void 0 ? {} : _temp5, onKeyDown = _ref6.onKeyDown, onChange = _ref6.onChange, onInput = _ref6.onInput, onBlur = _ref6.onBlur;
-    _ref6.onChangeText;
-    var _ref6$refKey = _ref6.refKey, refKey = _ref6$refKey === void 0 ? "ref" : _ref6$refKey, ref = _ref6.ref, rest = _objectWithoutPropertiesLoose(_ref6, _excluded4);
-    var _ref7 = _temp6 === void 0 ? {} : _temp6, _ref7$suppressRefErro = _ref7.suppressRefError;
-    var latestState = latest.current.state;
-    var inputHandleKeyDown = function inputHandleKeyDown2(event) {
-      var key = normalizeArrowKey(event);
+  const getInputProps = react.useCallback(function(_temp5, _temp6) {
+    let {
+      onKeyDown,
+      onChange,
+      onInput,
+      onBlur,
+      onChangeText,
+      refKey = "ref",
+      ref,
+      ...rest
+    } = _temp5 === void 0 ? {} : _temp5;
+    const latestState = latest.current.state;
+    const inputHandleKeyDown = (event) => {
+      const key = normalizeArrowKey(event);
       if (key && inputKeyDownHandlers[key]) {
         inputKeyDownHandlers[key](event);
       }
     };
-    var inputHandleChange = function inputHandleChange2(event) {
+    const inputHandleChange = (event) => {
       dispatch({
         type: InputChange,
         inputValue: event.target.value
       });
     };
-    var inputHandleBlur = function inputHandleBlur2() {
+    const inputHandleBlur = () => {
       if (latestState.isOpen && !mouseAndTouchTrackersRef.current.isMouseDown) {
         dispatch({
           type: InputBlur,
@@ -1214,64 +1330,83 @@ function useCombobox(userProps) {
         });
       }
     };
-    var onChangeKey = "onChange";
-    var eventHandlers = {};
+    const onChangeKey = "onChange";
+    let eventHandlers = {};
     if (!rest.disabled) {
-      var _eventHandlers;
-      eventHandlers = (_eventHandlers = {}, _eventHandlers[onChangeKey] = callAllEventHandlers(onChange, onInput, inputHandleChange), _eventHandlers.onKeyDown = callAllEventHandlers(onKeyDown, inputHandleKeyDown), _eventHandlers.onBlur = callAllEventHandlers(onBlur, inputHandleBlur), _eventHandlers);
+      eventHandlers = {
+        [onChangeKey]: callAllEventHandlers(onChange, onInput, inputHandleChange),
+        onKeyDown: callAllEventHandlers(onKeyDown, inputHandleKeyDown),
+        onBlur: callAllEventHandlers(onBlur, inputHandleBlur)
+      };
     }
-    return _extends((_extends5 = {}, _extends5[refKey] = handleRefs(ref, function(inputNode) {
-      inputRef.current = inputNode;
-    }), _extends5.id = elementIds.inputId, _extends5["aria-autocomplete"] = "list", _extends5["aria-controls"] = elementIds.menuId, _extends5), latestState.isOpen && latestState.highlightedIndex > -1 && {
-      "aria-activedescendant": elementIds.getItemId(latestState.highlightedIndex)
-    }, {
+    return {
+      [refKey]: handleRefs(ref, (inputNode) => {
+        inputRef.current = inputNode;
+      }),
+      id: elementIds.inputId,
+      "aria-autocomplete": "list",
+      "aria-controls": elementIds.menuId,
+      ...latestState.isOpen && latestState.highlightedIndex > -1 && {
+        "aria-activedescendant": elementIds.getItemId(latestState.highlightedIndex)
+      },
       "aria-labelledby": elementIds.labelId,
       autoComplete: "off",
-      value: latestState.inputValue
-    }, eventHandlers, rest);
+      value: latestState.inputValue,
+      ...eventHandlers,
+      ...rest
+    };
   }, [dispatch, inputKeyDownHandlers, latest, mouseAndTouchTrackersRef, setGetterPropCallInfo, elementIds]);
-  var getComboboxProps = react.useCallback(function(_temp7, _temp8) {
-    var _extends6;
-    var _ref8 = _temp7 === void 0 ? {} : _temp7, _ref8$refKey = _ref8.refKey, refKey = _ref8$refKey === void 0 ? "ref" : _ref8$refKey, ref = _ref8.ref, rest = _objectWithoutPropertiesLoose(_ref8, _excluded5);
-    var _ref9 = _temp8 === void 0 ? {} : _temp8, _ref9$suppressRefErro = _ref9.suppressRefError;
-    return _extends((_extends6 = {}, _extends6[refKey] = handleRefs(ref, function(comboboxNode) {
-      comboboxRef.current = comboboxNode;
-    }), _extends6.role = "combobox", _extends6["aria-haspopup"] = "listbox", _extends6["aria-owns"] = elementIds.menuId, _extends6["aria-expanded"] = latest.current.state.isOpen, _extends6), rest);
+  const getComboboxProps = react.useCallback(function(_temp7, _temp8) {
+    let {
+      refKey = "ref",
+      ref,
+      ...rest
+    } = _temp7 === void 0 ? {} : _temp7;
+    return {
+      [refKey]: handleRefs(ref, (comboboxNode) => {
+        comboboxRef.current = comboboxNode;
+      }),
+      role: "combobox",
+      "aria-haspopup": "listbox",
+      "aria-owns": elementIds.menuId,
+      "aria-expanded": latest.current.state.isOpen,
+      ...rest
+    };
   }, [latest, setGetterPropCallInfo, elementIds]);
-  var toggleMenu = react.useCallback(function() {
+  const toggleMenu = react.useCallback(() => {
     dispatch({
       type: FunctionToggleMenu
     });
   }, [dispatch]);
-  var closeMenu = react.useCallback(function() {
+  const closeMenu = react.useCallback(() => {
     dispatch({
       type: FunctionCloseMenu
     });
   }, [dispatch]);
-  var openMenu = react.useCallback(function() {
+  const openMenu = react.useCallback(() => {
     dispatch({
       type: FunctionOpenMenu
     });
   }, [dispatch]);
-  var setHighlightedIndex = react.useCallback(function(newHighlightedIndex) {
+  const setHighlightedIndex = react.useCallback((newHighlightedIndex) => {
     dispatch({
       type: FunctionSetHighlightedIndex,
       highlightedIndex: newHighlightedIndex
     });
   }, [dispatch]);
-  var selectItem = react.useCallback(function(newSelectedItem) {
+  const selectItem = react.useCallback((newSelectedItem) => {
     dispatch({
       type: FunctionSelectItem,
       selectedItem: newSelectedItem
     });
   }, [dispatch]);
-  var setInputValue = react.useCallback(function(newInputValue) {
+  const setInputValue = react.useCallback((newInputValue) => {
     dispatch({
       type: FunctionSetInputValue,
       inputValue: newInputValue
     });
   }, [dispatch]);
-  var reset = react.useCallback(function() {
+  const reset = react.useCallback(() => {
     dispatch({
       type: FunctionReset$1
     });
@@ -1296,7 +1431,7 @@ function useCombobox(userProps) {
     inputValue
   };
 }
-var propTypes = {
+const propTypes = {
   selectedItems: propTypes$3.array,
   initialSelectedItems: propTypes$3.array,
   defaultSelectedItems: propTypes$3.array,
