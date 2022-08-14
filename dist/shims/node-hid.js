@@ -4,7 +4,7 @@ const filterHIDDevices = (devices) => devices.filter((device) => {
   var _a;
   return (_a = device.collections) == null ? void 0 : _a.some((collection) => collection.usage === 97 && collection.usagePage === 65376);
 });
-const getVIAPathIdentifier = () => self.crypto && self.crypto.randomUUID && self.crypto.randomUUID() || `via-path:${Math.random()}`;
+const getVIAPathIdentifier = () => self.crypto && self.crypto.randomUUID() || `via-path:${Math.random()}`;
 const tagDevice = (device) => {
   var _a, _b;
   const path = device.__path || getVIAPathIdentifier();
