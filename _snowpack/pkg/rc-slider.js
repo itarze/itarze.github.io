@@ -1,8 +1,8 @@
-import {_ as _objectSpread2$1} from "./common/objectSpread2-5051fb86.js";
-import {_ as _typeof$1, a as _inherits, b as _classCallCheck, c as _createClass, d as _objectWithoutProperties, e as _toConsumableArray, f as _unsupportedIterableToArray} from "./common/toConsumableArray-44ce81ce.js";
+import {_ as _objectSpread2$1} from "./common/objectSpread2-c2ab668c.js";
+import {_ as _typeof$1, a as _inherits, b as _classCallCheck, c as _createClass, d as _objectWithoutProperties, e as _toConsumableArray, f as _unsupportedIterableToArray} from "./common/toConsumableArray-f2bb22b3.js";
 import {r as react} from "./common/index-86c632b0.js";
-import {_ as _defineProperty$1} from "./common/defineProperty-1b0b77a2.js";
-import {_ as _extends} from "./common/objectWithoutPropertiesLoose-0e59302b.js";
+import {_ as _defineProperty$1} from "./common/defineProperty-8af9ee69.js";
+import {_ as _extends} from "./common/objectWithoutPropertiesLoose-bb13de39.js";
 import {r as reactDom} from "./common/index-89b0786f.js";
 import {c as createCommonjsModule, a as commonjsGlobal} from "./common/_commonjsHelpers-8c19dec8.js";
 import {r as reactIs} from "./common/index-38b769d8.js";
@@ -124,9 +124,9 @@ function addEventListenerWrap(target, eventType, cb, option) {
 }
 var classnames = createCommonjsModule(function(module) {
   /*!
-    Copyright (c) 2018 Jed Watson.
-    Licensed under the MIT License (MIT), see
-    http://jedwatson.github.io/classnames
+  	Copyright (c) 2018 Jed Watson.
+  	Licensed under the MIT License (MIT), see
+  	http://jedwatson.github.io/classnames
   */
   (function() {
     var hasOwn = {}.hasOwnProperty;
@@ -147,14 +147,14 @@ var classnames = createCommonjsModule(function(module) {
             }
           }
         } else if (argType === "object") {
-          if (arg.toString === Object.prototype.toString) {
-            for (var key in arg) {
-              if (hasOwn.call(arg, key) && arg[key]) {
-                classes.push(key);
-              }
-            }
-          } else {
+          if (arg.toString !== Object.prototype.toString && !arg.toString.toString().includes("[native code]")) {
             classes.push(arg.toString());
+            continue;
+          }
+          for (var key in arg) {
+            if (hasOwn.call(arg, key) && arg[key]) {
+              classes.push(key);
+            }
           }
         }
       }
@@ -1707,7 +1707,17 @@ function contains(root2, n) {
   if (!root2) {
     return false;
   }
-  return root2.contains(n);
+  if (root2.contains) {
+    return root2.contains(n);
+  }
+  var node = n;
+  while (node) {
+    if (node === root2) {
+      return true;
+    }
+    node = node.parentNode;
+  }
+  return false;
 }
 function findDOMNode(node) {
   if (node instanceof HTMLElement) {
@@ -1843,10 +1853,7 @@ var isMobile = function() {
     return false;
   }
   var agent = navigator.userAgent || navigator.vendor || window.opera;
-  if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(agent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i.test(agent === null || agent === void 0 ? void 0 : agent.substr(0, 4))) {
-    return true;
-  }
-  return false;
+  return /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(agent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i.test(agent === null || agent === void 0 ? void 0 : agent.substr(0, 4));
 };
 function makePrefixMap(styleProp, eventName) {
   var prefixes = {};
@@ -2311,18 +2318,18 @@ var isVisible = function(element) {
   if (!element) {
     return false;
   }
-  if (element.offsetParent) {
+  if (element instanceof HTMLElement && element.offsetParent) {
     return true;
   }
-  if (element.getBBox) {
-    var box = element.getBBox();
-    if (box.width || box.height) {
+  if (element instanceof SVGGraphicsElement && element.getBBox) {
+    var _element$getBBox = element.getBBox(), width = _element$getBBox.width, height = _element$getBBox.height;
+    if (width || height) {
       return true;
     }
   }
-  if (element.getBoundingClientRect) {
-    var _box = element.getBoundingClientRect();
-    if (_box.width || _box.height) {
+  if (element instanceof HTMLElement && element.getBoundingClientRect) {
+    var _element$getBoundingC = element.getBoundingClientRect(), _width = _element$getBoundingC.width, _height = _element$getBoundingC.height;
+    if (_width || _height) {
       return true;
     }
   }
@@ -2332,44 +2339,30 @@ function ownKeys(object, enumerableOnly) {
   var keys2 = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) {
-      symbols = symbols.filter(function(sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    }
-    keys2.push.apply(keys2, symbols);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys2.push.apply(keys2, symbols);
   }
   return keys2;
 }
 function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function(key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function(key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
+    i % 2 ? ownKeys(Object(source), true).forEach(function(key) {
+      _defineProperty(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
   }
   return target;
 }
 function _typeof(obj) {
   "@babel/helpers - typeof";
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function(obj2) {
-      return typeof obj2;
-    };
-  } else {
-    _typeof = function(obj2) {
-      return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-    };
-  }
-  return _typeof(obj);
+  return _typeof = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(obj2) {
+    return typeof obj2;
+  } : function(obj2) {
+    return obj2 && typeof Symbol == "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+  }, _typeof(obj);
 }
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -2801,7 +2794,7 @@ function getWH(elem, name, ex) {
     if (cssBoxValue === null || cssBoxValue === void 0 || Number(cssBoxValue) < 0) {
       cssBoxValue = elem.style[name] || 0;
     }
-    cssBoxValue = parseFloat(cssBoxValue) || 0;
+    cssBoxValue = Math.floor(parseFloat(cssBoxValue)) || 0;
   }
   if (extra === void 0) {
     extra = isBorderBox ? BORDER_INDEX : CONTENT_INDEX;
@@ -4743,11 +4736,12 @@ var RcAlign = /* @__PURE__ */ react.forwardRef(Align);
 RcAlign.displayName = "Align";
 var useLayoutEffect = canUseDom() ? react.useLayoutEffect : react.useEffect;
 function _regeneratorRuntime() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   _regeneratorRuntime = function _regeneratorRuntime2() {
     return exports;
   };
-  var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = typeof Symbol == "function" ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+  var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function(obj, key, desc) {
+    obj[key] = desc.value;
+  }, $Symbol = typeof Symbol == "function" ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
   function define(obj, key, value) {
     return Object.defineProperty(obj, key, {
       value,
@@ -4765,48 +4759,9 @@ function _regeneratorRuntime() {
   }
   function wrap(innerFn, outerFn, self2, tryLocsList) {
     var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []);
-    return generator._invoke = function(innerFn2, self3, context2) {
-      var state = "suspendedStart";
-      return function(method, arg) {
-        if (state === "executing")
-          throw new Error("Generator is already running");
-        if (state === "completed") {
-          if (method === "throw")
-            throw arg;
-          return doneResult();
-        }
-        for (context2.method = method, context2.arg = arg; ; ) {
-          var delegate = context2.delegate;
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context2);
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel)
-                continue;
-              return delegateResult;
-            }
-          }
-          if (context2.method === "next")
-            context2.sent = context2._sent = context2.arg;
-          else if (context2.method === "throw") {
-            if (state === "suspendedStart")
-              throw state = "completed", context2.arg;
-            context2.dispatchException(context2.arg);
-          } else
-            context2.method === "return" && context2.abrupt("return", context2.arg);
-          state = "executing";
-          var record = tryCatch(innerFn2, self3, context2);
-          if (record.type === "normal") {
-            if (state = context2.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel)
-              continue;
-            return {
-              value: record.arg,
-              done: context2.done
-            };
-          }
-          record.type === "throw" && (state = "completed", context2.method = "throw", context2.arg = record.arg);
-        }
-      };
-    }(innerFn, self2, context), generator;
+    return defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self2, context)
+    }), generator;
   }
   function tryCatch(fn, obj, arg) {
     try {
@@ -4861,13 +4816,57 @@ function _regeneratorRuntime() {
       reject(record.arg);
     }
     var previousPromise;
-    this._invoke = function(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
+    defineProperty(this, "_invoke", {
+      value: function value(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new PromiseImpl(function(resolve, reject) {
+            invoke(method, arg, resolve, reject);
+          });
+        }
+        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+    });
+  }
+  function makeInvokeMethod(innerFn, self2, context) {
+    var state = "suspendedStart";
+    return function(method, arg) {
+      if (state === "executing")
+        throw new Error("Generator is already running");
+      if (state === "completed") {
+        if (method === "throw")
+          throw arg;
+        return doneResult();
+      }
+      for (context.method = method, context.arg = arg; ; ) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel)
+              continue;
+            return delegateResult;
+          }
+        }
+        if (context.method === "next")
+          context.sent = context._sent = context.arg;
+        else if (context.method === "throw") {
+          if (state === "suspendedStart")
+            throw state = "completed", context.arg;
+          context.dispatchException(context.arg);
+        } else
+          context.method === "return" && context.abrupt("return", context.arg);
+        state = "executing";
+        var record = tryCatch(innerFn, self2, context);
+        if (record.type === "normal") {
+          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel)
+            continue;
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        }
+        record.type === "throw" && (state = "completed", context.method = "throw", context.arg = record.arg);
+      }
     };
   }
   function maybeInvokeDelegate(delegate, context) {
@@ -4929,7 +4928,13 @@ function _regeneratorRuntime() {
       done: true
     };
   }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function(genFun) {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: true
+  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: true
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function(genFun) {
     var ctor = typeof genFun == "function" && genFun.constructor;
     return !!ctor && (ctor === GeneratorFunction || (ctor.displayName || ctor.name) === "GeneratorFunction");
   }, exports.mark = function(genFun) {
@@ -4950,8 +4955,8 @@ function _regeneratorRuntime() {
     return this;
   }), define(Gp, "toString", function() {
     return "[object Generator]";
-  }), exports.keys = function(object) {
-    var keys2 = [];
+  }), exports.keys = function(val) {
+    var object = Object(val), keys2 = [];
     for (var key in object) {
       keys2.push(key);
     }
@@ -5219,7 +5224,7 @@ var PopupInner = /* @__PURE__ */ react.forwardRef(function(props, ref) {
   }
   useLayoutEffect(function() {
     if (status === "align") {
-      if (alignTimes < 2) {
+      if (alignTimes < 3) {
         forceAlign();
       } else {
         goNextStatus(function() {
@@ -5261,7 +5266,7 @@ var PopupInner = /* @__PURE__ */ react.forwardRef(function(props, ref) {
     pointerEvents: !visible && status !== "stable" ? "none" : void 0
   }, style2);
   var alignDisabled = true;
-  if ((align === null || align === void 0 ? void 0 : align.points) && (status === "align" || status === "stable")) {
+  if (align !== null && align !== void 0 && align.points && (status === "align" || status === "stable")) {
     alignDisabled = false;
   }
   var childNode = children;
@@ -5389,77 +5394,77 @@ function generateTrigger(PortalComponent) {
       var _this;
       _classCallCheck(this, Trigger3);
       _this = _super.call(this, props);
-      _this.popupRef = /* @__PURE__ */ react.createRef();
-      _this.triggerRef = /* @__PURE__ */ react.createRef();
-      _this.portalContainer = void 0;
-      _this.attachId = void 0;
-      _this.clickOutsideHandler = void 0;
-      _this.touchOutsideHandler = void 0;
-      _this.contextMenuOutsideHandler1 = void 0;
-      _this.contextMenuOutsideHandler2 = void 0;
-      _this.mouseDownTimeout = void 0;
-      _this.focusTime = void 0;
-      _this.preClickTime = void 0;
-      _this.preTouchTime = void 0;
-      _this.delayTimer = void 0;
-      _this.hasPopupMouseDown = void 0;
-      _this.onMouseEnter = function(e) {
+      _defineProperty$1(_assertThisInitialized(_this), "popupRef", /* @__PURE__ */ react.createRef());
+      _defineProperty$1(_assertThisInitialized(_this), "triggerRef", /* @__PURE__ */ react.createRef());
+      _defineProperty$1(_assertThisInitialized(_this), "portalContainer", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "attachId", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "clickOutsideHandler", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "touchOutsideHandler", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "contextMenuOutsideHandler1", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "contextMenuOutsideHandler2", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "mouseDownTimeout", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "focusTime", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "preClickTime", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "preTouchTime", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "delayTimer", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "hasPopupMouseDown", void 0);
+      _defineProperty$1(_assertThisInitialized(_this), "onMouseEnter", function(e) {
         var mouseEnterDelay = _this.props.mouseEnterDelay;
         _this.fireEvents("onMouseEnter", e);
         _this.delaySetPopupVisible(true, mouseEnterDelay, mouseEnterDelay ? null : e);
-      };
-      _this.onMouseMove = function(e) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onMouseMove", function(e) {
         _this.fireEvents("onMouseMove", e);
         _this.setPoint(e);
-      };
-      _this.onMouseLeave = function(e) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onMouseLeave", function(e) {
         _this.fireEvents("onMouseLeave", e);
         _this.delaySetPopupVisible(false, _this.props.mouseLeaveDelay);
-      };
-      _this.onPopupMouseEnter = function() {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onPopupMouseEnter", function() {
         _this.clearDelayTimer();
-      };
-      _this.onPopupMouseLeave = function(e) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onPopupMouseLeave", function(e) {
         var _this$popupRef$curren;
         if (e.relatedTarget && !e.relatedTarget.setTimeout && contains((_this$popupRef$curren = _this.popupRef.current) === null || _this$popupRef$curren === void 0 ? void 0 : _this$popupRef$curren.getElement(), e.relatedTarget)) {
           return;
         }
         _this.delaySetPopupVisible(false, _this.props.mouseLeaveDelay);
-      };
-      _this.onFocus = function(e) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onFocus", function(e) {
         _this.fireEvents("onFocus", e);
         _this.clearDelayTimer();
         if (_this.isFocusToShow()) {
           _this.focusTime = Date.now();
           _this.delaySetPopupVisible(true, _this.props.focusDelay);
         }
-      };
-      _this.onMouseDown = function(e) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onMouseDown", function(e) {
         _this.fireEvents("onMouseDown", e);
         _this.preClickTime = Date.now();
-      };
-      _this.onTouchStart = function(e) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onTouchStart", function(e) {
         _this.fireEvents("onTouchStart", e);
         _this.preTouchTime = Date.now();
-      };
-      _this.onBlur = function(e) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onBlur", function(e) {
         _this.fireEvents("onBlur", e);
         _this.clearDelayTimer();
         if (_this.isBlurToHide()) {
           _this.delaySetPopupVisible(false, _this.props.blurDelay);
         }
-      };
-      _this.onContextMenu = function(e) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onContextMenu", function(e) {
         e.preventDefault();
         _this.fireEvents("onContextMenu", e);
         _this.setPopupVisible(true, e);
-      };
-      _this.onContextMenuClose = function() {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onContextMenuClose", function() {
         if (_this.isContextMenuToShow()) {
           _this.close();
         }
-      };
-      _this.onClick = function(event) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onClick", function(event) {
         _this.fireEvents("onClick", event);
         if (_this.focusTime) {
           var preTime;
@@ -5484,8 +5489,8 @@ function generateTrigger(PortalComponent) {
         if (_this.isClickToHide() && !nextVisible || nextVisible && _this.isClickToShow()) {
           _this.setPopupVisible(!_this.state.popupVisible, event);
         }
-      };
-      _this.onPopupMouseDown = function() {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onPopupMouseDown", function() {
         _this.hasPopupMouseDown = true;
         clearTimeout(_this.mouseDownTimeout);
         _this.mouseDownTimeout = window.setTimeout(function() {
@@ -5495,8 +5500,8 @@ function generateTrigger(PortalComponent) {
           var _this$context;
           (_this$context = _this.context).onPopupMouseDown.apply(_this$context, arguments);
         }
-      };
-      _this.onDocumentClick = function(event) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "onDocumentClick", function(event) {
         if (_this.props.mask && !_this.props.maskClosable) {
           return;
         }
@@ -5506,8 +5511,8 @@ function generateTrigger(PortalComponent) {
         if ((!contains(root2, target) || _this.isContextMenuOnly()) && !contains(popupNode, target) && !_this.hasPopupMouseDown) {
           _this.close();
         }
-      };
-      _this.getRootDomNode = function() {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "getRootDomNode", function() {
         var getTriggerDOMNode = _this.props.getTriggerDOMNode;
         if (getTriggerDOMNode) {
           return getTriggerDOMNode(_this.triggerRef.current);
@@ -5520,8 +5525,8 @@ function generateTrigger(PortalComponent) {
         } catch (err) {
         }
         return reactDom.findDOMNode(_assertThisInitialized(_this));
-      };
-      _this.getPopupClassNameFromAlign = function(align) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "getPopupClassNameFromAlign", function(align) {
         var className = [];
         var _this$props = _this.props, popupPlacement = _this$props.popupPlacement, builtinPlacements = _this$props.builtinPlacements, prefixCls = _this$props.prefixCls, alignPoint2 = _this$props.alignPoint, getPopupClassNameFromAlign = _this$props.getPopupClassNameFromAlign;
         if (popupPlacement && builtinPlacements) {
@@ -5531,8 +5536,8 @@ function generateTrigger(PortalComponent) {
           className.push(getPopupClassNameFromAlign(align));
         }
         return className.join(" ");
-      };
-      _this.getComponent = function() {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "getComponent", function() {
         var _this$props2 = _this.props, prefixCls = _this$props2.prefixCls, destroyPopupOnHide = _this$props2.destroyPopupOnHide, popupClassName = _this$props2.popupClassName, onPopupAlign = _this$props2.onPopupAlign, popupMotion = _this$props2.popupMotion, popupAnimation = _this$props2.popupAnimation, popupTransitionName = _this$props2.popupTransitionName, popupStyle = _this$props2.popupStyle, mask = _this$props2.mask, maskAnimation = _this$props2.maskAnimation, maskTransitionName = _this$props2.maskTransitionName, maskMotion = _this$props2.maskMotion, zIndex = _this$props2.zIndex, popup = _this$props2.popup, stretch = _this$props2.stretch, alignPoint2 = _this$props2.alignPoint, mobile = _this$props2.mobile, forceRender = _this$props2.forceRender, onPopupClick = _this$props2.onPopupClick;
         var _this$state = _this.state, popupVisible = _this$state.popupVisible, point = _this$state.point;
         var align = _this.getPopupAlign();
@@ -5571,8 +5576,8 @@ function generateTrigger(PortalComponent) {
           forceRender,
           onClick: onPopupClick
         }), typeof popup === "function" ? popup() : popup);
-      };
-      _this.attachParent = function(popupContainer) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "attachParent", function(popupContainer) {
         wrapperRaf.cancel(_this.attachId);
         var _this$props3 = _this.props, getPopupContainer = _this$props3.getPopupContainer, getDocument2 = _this$props3.getDocument;
         var domNode = _this.getRootDomNode();
@@ -5589,8 +5594,8 @@ function generateTrigger(PortalComponent) {
             _this.attachParent(popupContainer);
           });
         }
-      };
-      _this.getContainer = function() {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "getContainer", function() {
         if (!_this.portalContainer) {
           var getDocument2 = _this.props.getDocument;
           var popupContainer = getDocument2(_this.getRootDomNode()).createElement("div");
@@ -5602,8 +5607,8 @@ function generateTrigger(PortalComponent) {
         }
         _this.attachParent(_this.portalContainer);
         return _this.portalContainer;
-      };
-      _this.setPoint = function(point) {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "setPoint", function(point) {
         var alignPoint2 = _this.props.alignPoint;
         if (!alignPoint2 || !point)
           return;
@@ -5613,15 +5618,15 @@ function generateTrigger(PortalComponent) {
             pageY: point.pageY
           }
         });
-      };
-      _this.handlePortalUpdate = function() {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "handlePortalUpdate", function() {
         if (_this.state.prevPopupVisible !== _this.state.popupVisible) {
           _this.props.afterPopupVisibleChange(_this.state.popupVisible);
         }
-      };
-      _this.triggerContextValue = {
+      });
+      _defineProperty$1(_assertThisInitialized(_this), "triggerContextValue", {
         onPopupMouseDown: _this.onPopupMouseDown
-      };
+      });
       var _popupVisible;
       if ("popupVisible" in props) {
         _popupVisible = !!props.popupVisible;
@@ -5924,8 +5929,8 @@ function generateTrigger(PortalComponent) {
     }]);
     return Trigger3;
   }(react.Component);
-  Trigger2.contextType = TriggerContext;
-  Trigger2.defaultProps = {
+  _defineProperty$1(Trigger2, "contextType", TriggerContext);
+  _defineProperty$1(Trigger2, "defaultProps", {
     prefixCls: "rc-trigger-popup",
     getPopupClassNameFromAlign: returnEmptyString,
     getDocument: returnDocument,
@@ -5947,7 +5952,7 @@ function generateTrigger(PortalComponent) {
     showAction: [],
     hideAction: [],
     autoDestroy: false
-  };
+  });
   return Trigger2;
 }
 var Trigger = generateTrigger(Portal);

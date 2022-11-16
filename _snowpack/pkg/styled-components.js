@@ -618,7 +618,7 @@ var T = function() {
   return k.get(e);
 }, M = function(e, t) {
   t >= V && (V = t + 1), x.set(e, t), k.set(t, e);
-}, G = "style[" + A + '][data-styled-version="5.3.5"]', L = new RegExp("^" + A + '\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)'), F = function(e, t, n) {
+}, G = "style[" + A + '][data-styled-version="5.3.6"]', L = new RegExp("^" + A + '\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)'), F = function(e, t, n) {
   for (var r, o = n.split(","), s = 0, i = o.length; s < i; s++)
     (r = o[s]) && e.registerName(t, r);
 }, Y = function(e, t) {
@@ -634,7 +634,7 @@ var T = function() {
     }
   }
 }, q = function() {
-  return typeof window != "undefined" && window.__webpack_nonce__ !== void 0 ? window.__webpack_nonce__ : null;
+  return typeof __webpack_nonce__ != "undefined" ? __webpack_nonce__ : null;
 }, H = function(e) {
   var t = document.head, n = e || t, r = document.createElement("style"), o = function(e2) {
     for (var t2 = e2.childNodes, n2 = t2.length; n2 >= 0; n2--) {
@@ -643,7 +643,7 @@ var T = function() {
         return r2;
     }
   }(n), s = o !== void 0 ? o.nextSibling : null;
-  r.setAttribute(A, "active"), r.setAttribute("data-styled-version", "5.3.5");
+  r.setAttribute(A, "active"), r.setAttribute("data-styled-version", "5.3.6");
   var i = q();
   return i && r.setAttribute("nonce", i), n.insertBefore(r, s), r;
 }, $ = function() {
@@ -780,7 +780,7 @@ function re(e) {
   }
   return true;
 }
-var oe = ne("5.3.5"), se = function() {
+var oe = ne("5.3.6"), se = function() {
   function e(e2, t, n) {
     this.rules = e2, this.staticRulesId = "", this.isStatic = (n === void 0 || n.isStatic) && re(e2), this.componentId = t, this.baseHash = te(oe, t), this.baseStyle = n, Z.registerId(t);
   }
@@ -971,7 +971,7 @@ function qe(e, t, n) {
   var o = N(e), i = !ke(e), a = t.attrs, c = a === void 0 ? w : a, d = t.componentId, h = d === void 0 ? function(e2, t2) {
     var n2 = typeof e2 != "string" ? "sc" : Te(e2);
     Ye[n2] = (Ye[n2] || 0) + 1;
-    var r = n2 + "-" + xe("5.3.5" + n2 + Ye[n2]);
+    var r = n2 + "-" + xe("5.3.6" + n2 + Ye[n2]);
     return t2 ? t2 + "-" + r : r;
   }(t.displayName, t.parentComponentId) : d, p = t.displayName, f = p === void 0 ? function(e2) {
     return ke(e2) ? "styled." + e2 : "Styled(" + _(e2) + ")";

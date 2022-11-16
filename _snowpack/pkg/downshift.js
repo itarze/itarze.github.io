@@ -307,7 +307,7 @@ function getA11yStatusMessage$1(_ref2) {
     return "No results are available.";
   }
   if (resultCount !== previousResultCount) {
-    return resultCount + " result" + (resultCount === 1 ? " is" : "s are") + " available, use up and down arrow keys to navigate. Press Enter key to select.";
+    return `${resultCount} result${resultCount === 1 ? " is" : "s are"} available, use up and down arrow keys to navigate. Press Enter key to select.`;
   }
   return "";
 }
@@ -326,7 +326,7 @@ function normalizeArrowKey(event) {
     keyCode
   } = event;
   if (keyCode >= 37 && keyCode <= 40 && key.indexOf("Arrow") !== 0) {
-    return "Arrow" + key;
+    return `Arrow${key}`;
   }
   return key;
 }
@@ -449,7 +449,7 @@ function invokeOnChangeHandler(key, action, state, newState) {
     props,
     type
   } = action;
-  const handler = "on" + capitalizeString(key) + "Change";
+  const handler = `on${capitalizeString(key)}Change`;
   if (props[handler] && newState[key] !== void 0 && newState[key] !== state[key]) {
     props[handler]({
       type,
@@ -465,7 +465,7 @@ function getA11ySelectionMessage(selectionParameters) {
     selectedItem,
     itemToString: itemToStringLocal
   } = selectionParameters;
-  return selectedItem ? itemToStringLocal(selectedItem) + " has been selected." : "";
+  return selectedItem ? `${itemToStringLocal(selectedItem)} has been selected.` : "";
 }
 const updateA11yStatus = debounce((getA11yMessage, document2) => {
   setStatus(getA11yMessage(), document2);
@@ -473,7 +473,7 @@ const updateA11yStatus = debounce((getA11yMessage, document2) => {
 const useIsomorphicLayoutEffect = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined" ? react.useLayoutEffect : react.useEffect;
 function useElementIds(_ref) {
   let {
-    id = "downshift-" + generateId(),
+    id = `downshift-${generateId()}`,
     labelId,
     menuId,
     getItemId,
@@ -481,11 +481,11 @@ function useElementIds(_ref) {
     inputId
   } = _ref;
   const elementIdsRef = react.useRef({
-    labelId: labelId || id + "-label",
-    menuId: menuId || id + "-menu",
-    getItemId: getItemId || ((index) => id + "-item-" + index),
-    toggleButtonId: toggleButtonId || id + "-toggle-button",
-    inputId: inputId || id + "-input"
+    labelId: labelId || `${id}-label`,
+    menuId: menuId || `${id}-menu`,
+    getItemId: getItemId || ((index) => `${id}-item-${index}`),
+    toggleButtonId: toggleButtonId || `${id}-toggle-button`,
+    inputId: inputId || `${id}-input`
   });
   return elementIdsRef.current;
 }
@@ -502,7 +502,7 @@ function itemToString(item) {
   return item ? String(item) : "";
 }
 function capitalizeString(string) {
-  return "" + string.slice(0, 1).toUpperCase() + string.slice(1);
+  return `${string.slice(0, 1).toUpperCase()}${string.slice(1)}`;
 }
 function useLatestRef(val) {
   const ref = react.useRef(val);
@@ -549,7 +549,7 @@ function getDefaultValue$1(props, propKey, defaultStateValues) {
   if (defaultStateValues === void 0) {
     defaultStateValues = dropdownDefaultStateValues;
   }
-  const defaultValue = props["default" + capitalizeString(propKey)];
+  const defaultValue = props[`default${capitalizeString(propKey)}`];
   if (defaultValue !== void 0) {
     return defaultValue;
   }
@@ -563,7 +563,7 @@ function getInitialValue$1(props, propKey, defaultStateValues) {
   if (value !== void 0) {
     return value;
   }
-  const initialValue = props["initial" + capitalizeString(propKey)];
+  const initialValue = props[`initial${capitalizeString(propKey)}`];
   if (initialValue !== void 0) {
     return initialValue;
   }
@@ -705,7 +705,7 @@ function downshiftCommonReducer(state, action, stateChangeTypes) {
   switch (type) {
     case stateChangeTypes.ItemMouseMove:
       changes = {
-        highlightedIndex: action.index
+        highlightedIndex: action.disabled ? -1 : action.index
       };
       break;
     case stateChangeTypes.MenuMouseLeave:
@@ -1165,9 +1165,10 @@ function useCombobox(userProps) {
         getItemNodeFromIndex
       });
     },
-    Escape() {
+    Escape(event) {
       const latestState = latest.current.state;
       if (latestState.isOpen || latestState.inputValue || latestState.selectedItem || latestState.highlightedIndex > -1) {
+        event.preventDefault();
         dispatch({
           type: InputKeyDownEscape
         });
@@ -1219,8 +1220,10 @@ function useCombobox(userProps) {
       refKey = "ref",
       ref,
       onMouseMove,
+      onMouseDown,
       onClick,
       onPress,
+      disabled,
       ...rest
     } = _temp3 === void 0 ? {} : _temp3;
     const {
@@ -1240,7 +1243,8 @@ function useCombobox(userProps) {
       shouldScrollRef.current = false;
       dispatch({
         type: ItemMouseMove,
-        index
+        index,
+        disabled
       });
     };
     const itemHandleClick = () => {
@@ -1248,23 +1252,23 @@ function useCombobox(userProps) {
         type: ItemClick,
         index
       });
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
     };
+    const itemHandleMouseDown = (e2) => e2.preventDefault();
     return {
       [refKey]: handleRefs(ref, (itemNode) => {
         if (itemNode) {
           itemRefs.current[elementIds.getItemId(itemIndex)] = itemNode;
         }
       }),
+      disabled,
       role: "option",
-      "aria-selected": "" + (itemIndex === latestState.highlightedIndex),
+      "aria-selected": `${itemIndex === latestState.highlightedIndex}`,
       id: elementIds.getItemId(itemIndex),
-      ...!rest.disabled && {
-        onMouseMove: callAllEventHandlers(onMouseMove, itemHandleMouseMove),
+      ...!disabled && {
         [onSelectKey]: callAllEventHandlers(customClickHandler, itemHandleClick)
       },
+      onMouseMove: callAllEventHandlers(onMouseMove, itemHandleMouseMove),
+      onMouseDown: callAllEventHandlers(onMouseDown, itemHandleMouseDown),
       ...rest
     };
   }, [dispatch, latest, shouldScrollRef, elementIds]);

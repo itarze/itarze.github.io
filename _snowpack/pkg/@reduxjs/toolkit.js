@@ -1,6 +1,6 @@
 import {p as process} from "../common/process-2545f00a.js";
-import {_ as _objectSpread2} from "../common/objectSpread2-5051fb86.js";
-import "../common/defineProperty-1b0b77a2.js";
+import {_ as _objectSpread2} from "../common/objectSpread2-c2ab668c.js";
+import "../common/defineProperty-8af9ee69.js";
 function n(n2) {
   for (var r2 = arguments.length, t2 = Array(r2 > 1 ? r2 - 1 : 0), e = 1; e < r2; e++)
     t2[e - 1] = arguments[e];
@@ -12,15 +12,16 @@ function r(n2) {
   return !!n2 && !!n2[Q];
 }
 function t(n2) {
+  var r2;
   return !!n2 && (function(n3) {
     if (!n3 || typeof n3 != "object")
       return false;
-    var r2 = Object.getPrototypeOf(n3);
-    if (r2 === null)
+    var r3 = Object.getPrototypeOf(n3);
+    if (r3 === null)
       return true;
-    var t2 = Object.hasOwnProperty.call(r2, "constructor") && r2.constructor;
+    var t2 = Object.hasOwnProperty.call(r3, "constructor") && r3.constructor;
     return t2 === Object || typeof t2 == "function" && Function.toString.call(t2) === Z;
-  }(n2) || Array.isArray(n2) || !!n2[L] || !!n2.constructor[L] || s(n2) || v(n2));
+  }(n2) || Array.isArray(n2) || !!n2[L] || !!((r2 = n2.constructor) === null || r2 === void 0 ? void 0 : r2[L]) || s(n2) || v(n2));
 }
 function i(n2, r2, t2) {
   t2 === void 0 && (t2 = false), o(n2) === 0 ? (t2 ? Object.keys : nn)(n2).forEach(function(e) {
@@ -1211,13 +1212,13 @@ function createReducer(initialState, mapOrBuilderCallback, actionMatchers, defau
         if (r(previousState)) {
           var draft = previousState;
           var result = caseReducer(draft, action);
-          if (typeof result === "undefined") {
+          if (result === void 0) {
             return previousState;
           }
           return result;
         } else if (!t(previousState)) {
           var result = caseReducer(previousState, action);
-          if (typeof result === "undefined") {
+          if (result === void 0) {
             if (previousState === null) {
               return previousState;
             }
@@ -1273,7 +1274,18 @@ function createSlice(options) {
   function buildReducer() {
     var _c = typeof options.extraReducers === "function" ? executeReducerBuilderCallback(options.extraReducers) : [options.extraReducers], _d = _c[0], extraReducers = _d === void 0 ? {} : _d, _e = _c[1], actionMatchers = _e === void 0 ? [] : _e, _f = _c[2], defaultCaseReducer = _f === void 0 ? void 0 : _f;
     var finalCaseReducers = __spreadValues(__spreadValues({}, extraReducers), sliceCaseReducersByType);
-    return createReducer(initialState, finalCaseReducers, actionMatchers, defaultCaseReducer);
+    return createReducer(initialState, function(builder) {
+      for (var key in finalCaseReducers) {
+        builder.addCase(key, finalCaseReducers[key]);
+      }
+      for (var _i = 0, actionMatchers_1 = actionMatchers; _i < actionMatchers_1.length; _i++) {
+        var m2 = actionMatchers_1[_i];
+        builder.addMatcher(m2.matcher, m2.reducer);
+      }
+      if (defaultCaseReducer) {
+        builder.addDefaultCase(defaultCaseReducer);
+      }
+    });
   }
   var _reducer;
   return {
@@ -1296,5 +1308,13 @@ var alm = "listenerMiddleware";
 var addListener = createAction(alm + "/add");
 var clearAllListeners = createAction(alm + "/removeAll");
 var removeListener = createAction(alm + "/remove");
+var promise;
+var queueMicrotaskShim = typeof queueMicrotask === "function" ? queueMicrotask.bind(typeof window !== "undefined" ? window : global) : function(cb) {
+  return (promise || (promise = Promise.resolve())).then(cb).catch(function(err) {
+    return setTimeout(function() {
+      throw err;
+    }, 0);
+  });
+};
 N();
 export {configureStore, createSelector, createSlice};
