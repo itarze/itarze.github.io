@@ -11,6 +11,8 @@ import {
   getSelectedConnectedDevice
 } from "./devicesSlice.js";
 import {getMissingDefinition} from "../utils/device-store.js";
+import {getBasicKeyDict} from "../utils/key-to-byte/dictionary-store.js";
+import {getByteToKey} from "../utils/key.js";
 const initialState = {
   definitions: {},
   customDefinitions: {},
@@ -46,6 +48,10 @@ export const getCustomDefinitions = (state) => state.definitions.customDefinitio
 export const getLayoutOptionsMap = (state) => state.definitions.layoutOptionsMap;
 export const getDefinitions = createSelector(getBaseDefinitions, getCustomDefinitions, (definitions, customDefinitions) => ({...definitions, ...customDefinitions}));
 export const getSelectedDefinition = createSelector(getDefinitions, getSelectedConnectedDevice, (definitions, connectedDevice) => connectedDevice && definitions && definitions[connectedDevice.vendorProductId] && definitions[connectedDevice.vendorProductId][connectedDevice.requiredDefinitionVersion]);
+export const getBasicKeyToByte = createSelector(getSelectedConnectedDevice, (connectedDevice) => {
+  const basicKeyToByte = getBasicKeyDict(connectedDevice ? connectedDevice.protocol : 0);
+  return {basicKeyToByte, byteToKey: getByteToKey(basicKeyToByte)};
+});
 export const getSelectedLayoutOptions = createSelector(getSelectedDefinition, getLayoutOptionsMap, getSelectedDevicePath, (definition, map, path) => path && map[path] || definition && definition.layouts.labels && definition.layouts.labels.map((_) => 0) || []);
 export const getSelectedOptionKeys = createSelector(getSelectedLayoutOptions, getSelectedDefinition, (layoutOptions, definition) => definition && layoutOptions.flatMap((option, idx) => definition.layouts.optionKeys[idx] && definition.layouts.optionKeys[idx][option] || []));
 export const getSelectedKeyDefinitions = createSelector(getSelectedDefinition, getSelectedOptionKeys, (definition, optionKeys) => {

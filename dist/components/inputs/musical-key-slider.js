@@ -1,6 +1,6 @@
 import React from "../../../_snowpack/pkg/react.js";
 import {AccentSlider} from "./accent-slider.js";
-import basicKeyToByte from "../../utils/key-to-byte.json.proxy.js";
+import basicKeyToByte from "../../utils/key-to-byte/default.json.proxy.js";
 let drums;
 let square;
 let pipe;

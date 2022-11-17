@@ -1,5 +1,3 @@
-import basicKeyToByte from "./key-to-byte.json.proxy.js";
-import {byteToKey} from "./key.js";
 const quantumRanges = {
   QK_MODS: 256,
   QK_RMODS_MIN: 4096,
@@ -96,19 +94,20 @@ const modifierKeyToValue = {
 const modifierValuetoKey = Object.entries(modifierKeyToValue).reduce((acc, [key, value]) => ({...acc, [value]: key}), {});
 const topLevelValueToMacro = Object.entries(topLevelMacroToValue).reduce((acc, [key, value]) => ({...acc, [value]: key}), {});
 const valueToRange = Object.entries(quantumRanges).map(([key, value]) => [value, key]).sort((a, b) => a[0] - b[0]);
-export const advancedStringToKeycode = (inputString) => {
+export const advancedStringToKeycode = (inputString, basicKeyToByte) => {
   const upperString = inputString.toUpperCase();
   const parts = upperString.split(/\(|\)/).map((part) => part.trim());
   if (Object.keys(topLevelMacroToValue).includes(parts[0])) {
-    return parseTopLevelMacro(parts);
+    return parseTopLevelMacro(parts, basicKeyToByte);
   } else if (Object.keys(modifierKeyToValue).includes(parts[0])) {
-    return parseModifierCode(parts);
+    return parseModifierCode(parts, basicKeyToByte);
   }
   return 0;
 };
-export const advancedKeycodeToString = (inputKeycode) => {
+export const advancedKeycodeToString = (inputKeycode, basicKeyToByte, byteToKey) => {
   let lastRange = null;
   let lastValue = -1;
+  const btk = byteToKey;
   for (let [value, rangeName] of valueToRange) {
     if (inputKeycode < value) {
       break;
@@ -118,7 +117,7 @@ export const advancedKeycodeToString = (inputKeycode) => {
   }
   const topLevelModKeys = ["QK_MODS", "QK_RMODS_MIN"];
   if (topLevelModKeys.includes(lastRange)) {
-    return topLevelModToString(inputKeycode);
+    return topLevelModToString(inputKeycode, basicKeyToByte, byteToKey);
   }
   let humanReadable = topLevelValueToMacro[lastValue] + "(";
   let remainder = inputKeycode & ~lastValue;
@@ -135,7 +134,7 @@ export const advancedKeycodeToString = (inputKeycode) => {
       break;
     case "QK_LAYER_TAP":
       layer = remainder >> 8;
-      keycode = byteToKey[remainder & 255];
+      keycode = btk[remainder & 255];
       humanReadable += layer + "," + keycode + ")";
       break;
     case "QK_TO":
@@ -165,7 +164,7 @@ const modValueToString = (modMask) => {
   const qualifyingStrings = Object.entries(modMasks).filter((part) => !excluded.includes(part[0]) && (part[1] & modMask) === part[1]).map((part) => part[0]);
   return qualifyingStrings.join(" | ");
 };
-const topLevelModToString = (modNumber) => {
+const topLevelModToString = (modNumber, basicKeyToByte, byteToKey) => {
   const keycode = byteToKey[modNumber & 255];
   const enabledMods = Object.entries(modifierValuetoKey).filter((part) => {
     const current = Number.parseInt(part[0]);
@@ -173,7 +172,7 @@ const topLevelModToString = (modNumber) => {
   }).map((part) => part[1]);
   return enabledMods.join("(") + "(" + keycode + ")".repeat(enabledMods.length);
 };
-const parseTopLevelMacro = (inputParts) => {
+const parseTopLevelMacro = (inputParts, basicKeyToByte) => {
   var _a;
   const topLevelKey = inputParts[0];
   const parameter = (_a = inputParts[1]) != null ? _a : "";
@@ -236,7 +235,7 @@ const parseMods = (input = "") => {
   }
   return parts.reduce((acc, part) => acc | modMasks[part], 0);
 };
-const parseModifierCode = (inputParts) => {
+const parseModifierCode = (inputParts, basicKeyToByte) => {
   const realParts = inputParts.filter((nonce) => nonce.length !== 0);
   const bytes = realParts.map((part, idx) => {
     if (idx === realParts.length - 1) {
@@ -250,9 +249,9 @@ const parseModifierCode = (inputParts) => {
   }
   return bytes.reduce((acc, byte) => acc | byte, 0);
 };
-export const anyKeycodeToString = (input) => {
+export const anyKeycodeToString = (input, basicKeyToByte, byteToKey) => {
   let currentValue = "";
-  const advancedParsed = advancedKeycodeToString(input);
+  const advancedParsed = advancedKeycodeToString(input, basicKeyToByte, byteToKey);
   if (byteToKey[input]) {
     currentValue = byteToKey[input];
   } else if (advancedParsed !== null) {

@@ -1,5 +1,5 @@
 import React, {createRef, useEffect, useState} from "../../_snowpack/pkg/react.js";
-import styles from "./Home.module.css.proxy.js";
+import styled from "../../_snowpack/pkg/styled-components.js";
 import {mapEvtToKeycode, getByteForCode} from "../utils/key.js";
 import {startMonitoring, usbDetect} from "../utils/usb-hid.js";
 import {Title} from "./title-bar.js";
@@ -30,9 +30,37 @@ import {
   updateSelectedKey as updateSelectedKeyAction
 } from "../store/keymapSlice.js";
 import {
+  getBasicKeyToByte,
   getSelectedDefinition,
   getSelectedKeyDefinitions
 } from "../store/definitionsSlice.js";
+const ErrorHome = styled.div`
+  background: var(--color_jet);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
+`;
+const UsbError = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 650px;
+  text-align: center;
+`;
+const UsbErrorIcon = styled.div`
+  font-size: 2rem;
+`;
+const UsbErrorHeading = styled.h1`
+  margin: 1rem 0 0;
+`;
+const UsbErrorWebHIDLink = styled.a`
+  text-decoration: underline;
+`;
 const timeoutRepeater = (fn, timeout, numToRepeat = 0) => () => setTimeout(() => {
   fn();
   if (numToRepeat > 0) {
@@ -50,6 +78,7 @@ export const Home = (props) => {
   const selectedLayerIndex = useAppSelector(getSelectedLayerIndex);
   const selectedKeyDefinitions = useAppSelector(getSelectedKeyDefinitions);
   const disableFastRemap = useAppSelector(getDisableFastRemap);
+  const {basicKeyToByte} = useAppSelector(getBasicKeyToByte);
   const updateDevicesRepeat = timeoutRepeater(() => {
     dispatch(reloadConnectedDevices());
   }, 500, 1);
@@ -63,7 +92,7 @@ export const Home = (props) => {
     if (allowKeyRemappingViaKeyboard && globalHotKeysAllowed && selectedKey !== null) {
       const keycode = mapEvtToKeycode(evt);
       if (keycode) {
-        updateSelectedKey(getByteForCode(keycode));
+        updateSelectedKey(getByteForCode(keycode, basicKeyToByte));
       }
     }
   };
@@ -99,7 +128,7 @@ export const Home = (props) => {
       await api.setRGBMode(val);
     }
   };
-  const [selectedTitle, setSelectedTitle] = useState(null);
+  const [, setSelectedTitle] = useState(null);
   const homeElem = createRef();
   useEffect(() => {
     if (!hasHIDSupport) {
@@ -124,19 +153,11 @@ export const Home = (props) => {
     dispatch(updateSelectedKeyAction(null));
     toggleLights();
   }, [selectedDevice]);
-  return /* @__PURE__ */ React.createElement("div", {
-    className: styles.home,
+  return /* @__PURE__ */ React.createElement(ErrorHome, {
     ref: homeElem,
     tabIndex: 0,
     style: {flex: 1}
-  }, !hasHIDSupport ? /* @__PURE__ */ React.createElement("div", {
-    className: styles.usbError
-  }, /* @__PURE__ */ React.createElement("div", {
-    className: styles.usbErrorIcon
-  }, "❌"), /* @__PURE__ */ React.createElement("h1", {
-    className: styles.usbErrorHeading
-  }, "USB Detection Error"), /* @__PURE__ */ React.createElement("p", null, "Looks like there was a problem getting USB detection working. Right now, we only support", " ", /* @__PURE__ */ React.createElement("a", {
-    className: styles.usbErrorWebHIDLink,
+  }, !hasHIDSupport ? /* @__PURE__ */ React.createElement(UsbError, null, /* @__PURE__ */ React.createElement(UsbErrorIcon, null, "❌"), /* @__PURE__ */ React.createElement(UsbErrorHeading, null, "USB Detection Error"), /* @__PURE__ */ React.createElement("p", null, "Looks like there was a problem getting USB detection working. Right now, we only support", " ", /* @__PURE__ */ React.createElement(UsbErrorWebHIDLink, {
     href: "https://caniuse.com/?search=webhid",
     target: "_blank"
   }, "browsers that have WebHID enabled"), ", so make sure yours is compatible before trying again.")) : props.children);

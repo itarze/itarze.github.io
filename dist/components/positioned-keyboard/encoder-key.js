@@ -1,7 +1,7 @@
 import React, {memo} from "../../../_snowpack/pkg/react.js";
 import {
   getDarkenedColor,
-  getKeyContainerPosition,
+  getEncoderKeyContainerPosition,
   getRotationContainerTransform,
   KeyContainer,
   Legend,
@@ -74,7 +74,7 @@ export const EncoderKeyComponent = memo(({
     evt.stopPropagation();
     onClick(id);
   };
-  const keyContainerStyle = getKeyContainerPosition({
+  const keyContainerStyle = getEncoderKeyContainerPosition({
     w,
     h,
     x,

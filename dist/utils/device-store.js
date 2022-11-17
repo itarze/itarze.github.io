@@ -7,6 +7,7 @@ let deviceStore;
 const defaultStoreData = {
   definitionIndex: {
     generatedAt: -1,
+    hash: "",
     version: "2.0.0",
     theme: getTheme(),
     supportedVendorProductIdMap: {}
@@ -27,30 +28,33 @@ initDeviceStore();
 export async function syncStore() {
   const currentDefinitionIndex = deviceStore.get("definitionIndex");
   try {
+    const hash = await (await fetch("/definitions/hash.json")).json();
+    if (hash === currentDefinitionIndex.hash) {
+      return currentDefinitionIndex;
+    }
     const response = await fetch("/definitions/supported_kbs.json", {
       cache: "reload"
     });
     const json = await response.json();
-    if (json.generatedAt !== (currentDefinitionIndex == null ? void 0 : currentDefinitionIndex.generatedAt)) {
-      await setCommonMenus();
-      const v2vpidMap = json.vendorProductIds.v2.reduce((acc, id) => {
-        acc[id] = acc[id] || {};
-        acc[id].v2 = acc[id].v3 = true;
-        return acc;
-      }, {});
-      const vpidMap = json.vendorProductIds.v3.reduce((acc, def) => {
-        acc[def] = acc[def] || {};
-        acc[def].v3 = true;
-        return acc;
-      }, v2vpidMap);
-      const newIndex = {
-        ...json,
-        supportedVendorProductIdMap: vpidMap
-      };
-      deviceStore.set("definitionIndex", newIndex);
-      deviceStore.set("definitions", {});
-      return newIndex;
-    }
+    await setCommonMenus();
+    const v2vpidMap = json.vendorProductIds.v2.reduce((acc, id) => {
+      acc[id] = acc[id] || {};
+      acc[id].v2 = acc[id].v3 = true;
+      return acc;
+    }, {});
+    const vpidMap = json.vendorProductIds.v3.reduce((acc, def) => {
+      acc[def] = acc[def] || {};
+      acc[def].v3 = true;
+      return acc;
+    }, v2vpidMap);
+    const newIndex = {
+      ...json,
+      hash,
+      supportedVendorProductIdMap: vpidMap
+    };
+    deviceStore.set("definitionIndex", newIndex);
+    deviceStore.set("definitions", {});
+    return newIndex;
   } catch (e) {
     console.warn(e);
   }

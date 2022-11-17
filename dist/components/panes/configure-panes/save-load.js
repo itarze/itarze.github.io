@@ -8,7 +8,10 @@ import {getByteForCode, getCodeForByte} from "../../../utils/key.js";
 import {title, component} from "../../icons/save.js";
 import {CenterPane} from "../pane.js";
 import {Detail, Label, OverflowCell, ControlRow} from "../grid.js";
-import {getSelectedDefinition} from "../../../store/definitionsSlice.js";
+import {
+  getBasicKeyToByte,
+  getSelectedDefinition
+} from "../../../store/definitionsSlice.js";
 import {
   getSelectedRawLayers,
   saveRawKeymapToDevice
@@ -34,18 +37,40 @@ export const Pane = () => {
   const selectedDevice = useAppSelector(getSelectedConnectedDevice);
   const rawLayers = useAppSelector(getSelectedRawLayers);
   const macros = useAppSelector((state) => state.macros);
+  const {basicKeyToByte, byteToKey} = useAppSelector(getBasicKeyToByte);
   if (!selectedDefinition || !selectedDevice) {
     return null;
   }
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const saveLayout = () => {
-    const {name, vendorProductId} = selectedDefinition;
+  const getEncoderValues = async () => {
+    const {name, vendorProductId, layouts} = selectedDefinition;
+    const {keys, optionKeys} = layouts;
+    const encoders = [
+      ...keys,
+      ...Object.values(optionKeys).flatMap((a) => Object.values(a)).flat()
+    ].filter((a) => "ei" in a).map((a) => a.ei);
+    if (encoders.length > 0) {
+      const maxEncoder = Math.max(...encoders) + 1;
+      const numberOfLayers = rawLayers.length;
+      const encoderValues = await Promise.all(Array(maxEncoder).fill(0).map((_, i) => Promise.all(Array(numberOfLayers).fill(0).map((_2, j) => Promise.all([
+        selectedDevice.api.getEncoderValue(j, i, false),
+        selectedDevice.api.getEncoderValue(j, i, true)
+      ]).then((a) => a.map((keyByte) => getCodeForByte(keyByte, basicKeyToByte, byteToKey) || ""))))));
+      return encoderValues;
+    } else {
+      return [];
+    }
+  };
+  const saveLayout = async () => {
+    const {name, vendorProductId, layouts} = selectedDefinition;
+    const encoderValues = await getEncoderValues();
     const saveFile = {
       name,
       vendorProductId,
       macros: [...macros.expressions],
-      layers: rawLayers.map((layer) => layer.keymap.map((keyByte) => getCodeForByte(keyByte) || ""))
+      layers: rawLayers.map((layer) => layer.keymap.map((keyByte) => getCodeForByte(keyByte, basicKeyToByte, byteToKey) || "")),
+      encoders: encoderValues
     };
     const content = stringify(saveFile);
     const defaultFilename = name.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
@@ -84,8 +109,14 @@ export const Pane = () => {
         }
         dispatch(saveMacros(selectedDevice, saveFile.macros));
       }
-      const keymap = saveFile.layers.map((layer) => layer.map((key) => getByteForCode(`${key}`)));
+      const keymap = saveFile.layers.map((layer) => layer.map((key) => getByteForCode(`${key}`, basicKeyToByte)));
       await dispatch(saveRawKeymapToDevice(keymap, selectedDevice));
+      if (saveFile.encoders) {
+        await Promise.all(saveFile.encoders.map((encoder, id) => Promise.all(encoder.map((layer, layerId) => Promise.all([
+          selectedDevice.api.setEncoderValue(layerId, id, false, getByteForCode(`${layer[0]}`, basicKeyToByte)),
+          selectedDevice.api.setEncoderValue(layerId, id, true, getByteForCode(`${layer[1]}`, basicKeyToByte))
+        ])))));
+      }
       setSuccessMessage("Successfully updated layout!");
     };
     reader.readAsBinaryString(file);

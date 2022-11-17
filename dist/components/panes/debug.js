@@ -31,7 +31,8 @@ import {
 import {
   getBaseDefinitions,
   getDefinitions,
-  getCustomDefinitions
+  getCustomDefinitions,
+  getBasicKeyToByte
 } from "../../store/definitionsSlice.js";
 import TextInput from "../inputs/text-input.js";
 const Container = styled.div`
@@ -110,11 +111,12 @@ const TestControls = () => {
   const [colorVal, setColorVal] = useState([0, 0]);
   const [selectionVal, setSelectionVal] = useState(0);
   const [keycode, setKeycode] = useState(0);
+  const {basicKeyToByte, byteToKey} = useAppSelector(getBasicKeyToByte);
   const selectOptions = [
     {label: "Option 1", value: "0"},
     {label: "Option 2", value: "1"}
   ];
-  return /* @__PURE__ */ React.createElement(ControlGroup, null, /* @__PURE__ */ React.createElement(ControlGroupHeader, null, "Controls"), /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, "Text Input"), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(TextInput, null))), /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, keycode, " / ", anyKeycodeToString(keycode)), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(PelpiKeycodeInput, {
+  return /* @__PURE__ */ React.createElement(ControlGroup, null, /* @__PURE__ */ React.createElement(ControlGroupHeader, null, "Controls"), /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, "Text Input"), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(TextInput, null))), /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, keycode, " / ", anyKeycodeToString(keycode, basicKeyToByte, byteToKey)), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(PelpiKeycodeInput, {
     value: keycode,
     setValue: setKeycode,
     meta: {}

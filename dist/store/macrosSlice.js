@@ -1,5 +1,5 @@
 import {createSlice} from "../../_snowpack/pkg/@reduxjs/toolkit.js";
-import {MacroAPI} from "../utils/macro-api.js";
+import {getMacroAPI} from "../utils/macro-api/index.js";
 const initialState = {
   expressions: [],
   isFeatureSupported: true
@@ -21,13 +21,13 @@ export const macrosSlice = createSlice({
 });
 export const {loadMacrosSuccess, saveMacrosSuccess, setMacrosNotSupported} = macrosSlice.actions;
 export default macrosSlice.reducer;
-export const loadMacros = (connectedDevice) => async (dispatch) => {
+export const loadMacros = (connectedDevice, basicKeyToByte) => async (dispatch) => {
   const {api, protocol} = connectedDevice;
   if (protocol < 8) {
     dispatch(setMacrosNotSupported());
   } else {
     try {
-      const macroApi = new MacroAPI(api);
+      const macroApi = getMacroAPI(protocol, api);
       if (macroApi) {
         const macros = await macroApi.readMacroExpressions();
         dispatch(loadMacrosSuccess(macros));
@@ -38,8 +38,8 @@ export const loadMacros = (connectedDevice) => async (dispatch) => {
   }
 };
 export const saveMacros = (connectedDevice, macros) => async (dispatch) => {
-  const {api} = connectedDevice;
-  const macroApi = new MacroAPI(api);
+  const {api, protocol} = connectedDevice;
+  const macroApi = getMacroAPI(protocol, api);
   if (macroApi) {
     await macroApi.writeMacroExpressions(macros);
     dispatch(saveMacrosSuccess(macros));

@@ -1,8 +1,7 @@
 import {p as process} from "./common/process-2545f00a.js";
-import {r as reactIs} from "./common/index-38b769d8.js";
+import {r as reactIs, h as hoistNonReactStatics_cjs} from "./common/hoist-non-react-statics.cjs-ec82709f.js";
 import {r as react} from "./common/index-86c632b0.js";
 import {m as memoize} from "./common/emotion-memoize.esm-69314c55.js";
-import {h as hoistNonReactStatics_cjs} from "./common/hoist-non-react-statics.cjs-0d803417.js";
 import "./common/_commonjsHelpers-8c19dec8.js";
 function stylis_min(W2) {
   function M2(d, c, e, h, a) {
@@ -87,11 +86,11 @@ function stylis_min(W2) {
                     r = c;
                     break;
                   default:
-                    r = O;
+                    r = O2;
                 }
                 k2 = M2(c, r, k2, g2, a + 1);
                 t = k2.length;
-                0 < A2 && (r = X2(O, f, I2), C = H2(3, k2, r, c, D, z2, t, g2, a, h), f = r.join(""), C !== void 0 && (t = (k2 = C.trim()).length) === 0 && (g2 = 0, k2 = ""));
+                0 < A2 && (r = X2(O2, f, I2), C = H2(3, k2, r, c, D, z2, t, g2, a, h), f = r.join(""), C !== void 0 && (t = (k2 = C.trim()).length) === 0 && (g2 = 0, k2 = ""));
                 if (0 < t)
                   switch (g2) {
                     case 115:
@@ -477,14 +476,14 @@ function stylis_min(W2) {
       var h = H2(-1, c, e, e, D, z2, 0, 0, 0, 0);
       h !== void 0 && typeof h === "string" && (c = h);
     }
-    var a = M2(O, e, c, 0, 0);
+    var a = M2(O2, e, c, 0, 0);
     0 < A2 && (h = H2(-2, a, e, e, D, z2, a.length, 0, 0, 0), h !== void 0 && (a = h));
     V2 = "";
     E2 = 0;
     z2 = D = 1;
     return a;
   }
-  var ca = /^\0+/g, N2 = /[\0\r\f]/g, aa = /: */g, ka = /zoo|gra/, ma = /([,: ])(transform)/g, ia = /,\r+?/g, F2 = /([\t\r\n ])*\f?&/g, fa = /@(k\w+)\s*(\S*)\s*/, Q2 = /::(place)/g, ha = /:(read-only)/g, G2 = /[svh]\w+-[tblr]{2}/, da = /\(\s*(.*)\s*\)/g, oa = /([\s\S]*?);/g, ba = /-self|flex-/g, na = /[^]*?(:[rp][el]a[\w-]+)[^]*/, la = /stretch|:\s*\w+\-(?:conte|avail)/, ja = /([^-])(image-set\()/, z2 = 1, D = 1, E2 = 0, w2 = 1, O = [], S2 = [], A2 = 0, R = null, Y2 = 0, V2 = "";
+  var ca = /^\0+/g, N2 = /[\0\r\f]/g, aa = /: */g, ka = /zoo|gra/, ma = /([,: ])(transform)/g, ia = /,\r+?/g, F2 = /([\t\r\n ])*\f?&/g, fa = /@(k\w+)\s*(\S*)\s*/, Q2 = /::(place)/g, ha = /:(read-only)/g, G2 = /[svh]\w+-[tblr]{2}/, da = /\(\s*(.*)\s*\)/g, oa = /([\s\S]*?);/g, ba = /-self|flex-/g, na = /[^]*?(:[rp][el]a[\w-]+)[^]*/, la = /stretch|:\s*\w+\-(?:conte|avail)/, ja = /([^-])(image-set\()/, z2 = 1, D = 1, E2 = 0, w2 = 1, O2 = [], S2 = [], A2 = 0, R = null, Y2 = 0, V2 = "";
   B2.use = T2;
   B2.set = U2;
   W2 !== void 0 && U2(W2);
@@ -567,7 +566,7 @@ function _(e) {
 function N(e) {
   return e && typeof e.styledComponentId == "string";
 }
-var A = typeof process != "undefined" && process.env.SC_ATTR || "data-styled", I = typeof window != "undefined" && "HTMLElement" in window, P = Boolean(typeof SC_DISABLE_SPEEDY == "boolean" ? SC_DISABLE_SPEEDY : typeof process != "undefined" && process.env.REACT_APP_SC_DISABLE_SPEEDY !== void 0 && process.env.REACT_APP_SC_DISABLE_SPEEDY !== "" ? process.env.REACT_APP_SC_DISABLE_SPEEDY : typeof process != "undefined" && process.env.SC_DISABLE_SPEEDY !== void 0 && process.env.SC_DISABLE_SPEEDY !== "" ? process.env.SC_DISABLE_SPEEDY : false);
+var A = typeof process != "undefined" && process.env.SC_ATTR || "data-styled", I = typeof window != "undefined" && "HTMLElement" in window, P = Boolean(typeof SC_DISABLE_SPEEDY == "boolean" ? SC_DISABLE_SPEEDY : typeof process != "undefined" && process.env.REACT_APP_SC_DISABLE_SPEEDY !== void 0 && process.env.REACT_APP_SC_DISABLE_SPEEDY !== "" ? process.env.REACT_APP_SC_DISABLE_SPEEDY : typeof process != "undefined" && process.env.SC_DISABLE_SPEEDY !== void 0 && process.env.SC_DISABLE_SPEEDY !== "" ? process.env.SC_DISABLE_SPEEDY : false), O = {};
 function j(e) {
   for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), r = 1; r < t; r++)
     n[r - 1] = arguments[r];
@@ -979,7 +978,7 @@ function qe(e, t, n) {
   o && e.shouldForwardProp && (A2 = t.shouldForwardProp ? function(n2, r, o2) {
     return e.shouldForwardProp(n2, r, o2) && t.shouldForwardProp(n2, r, o2);
   } : e.shouldForwardProp);
-  var C, I2 = new se(n, g2, o ? e.componentStyle : void 0), P2 = I2.isStatic && c.length === 0, O = function(e2, t2) {
+  var C, I2 = new se(n, g2, o ? e.componentStyle : void 0), P2 = I2.isStatic && c.length === 0, O2 = function(e2, t2) {
     return function(e3, t3, n2, r) {
       var o2 = e3.attrs, i2 = e3.componentStyle, a2 = e3.defaultProps, c2 = e3.foldedComponentIds, d2 = e3.shouldForwardProp, h2 = e3.styledComponentId, p2 = e3.target;
       var f2 = function(e4, t4, n3) {
@@ -999,7 +998,7 @@ function qe(e, t, n) {
       return t3.style && g3.style !== t3.style && (C2.style = v({}, t3.style, {}, g3.style)), C2.className = Array.prototype.concat(c2, h2, S3 !== h2 ? S3 : null, t3.className, g3.className).filter(Boolean).join(" "), C2.ref = w2, react.createElement(_2, C2);
     }(C, e2, t2, P2);
   };
-  return O.displayName = f, (C = react.forwardRef(O)).attrs = S2, C.componentStyle = I2, C.displayName = f, C.shouldForwardProp = A2, C.foldedComponentIds = o ? Array.prototype.concat(e.foldedComponentIds, e.styledComponentId) : w, C.styledComponentId = g2, C.target = o ? e.target : e, C.withComponent = function(e2) {
+  return O2.displayName = f, (C = react.forwardRef(O2)).attrs = S2, C.componentStyle = I2, C.displayName = f, C.shouldForwardProp = A2, C.foldedComponentIds = o ? Array.prototype.concat(e.foldedComponentIds, e.styledComponentId) : w, C.styledComponentId = g2, C.target = o ? e.target : e, C.withComponent = function(e2) {
     var r = t.componentId, o2 = function(e3, t2) {
       if (e3 == null)
         return {};
@@ -1034,4 +1033,42 @@ var He = function(e) {
 ["a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdi", "bdo", "big", "blockquote", "body", "br", "button", "canvas", "caption", "cite", "code", "col", "colgroup", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "div", "dl", "dt", "em", "embed", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "kbd", "keygen", "label", "legend", "li", "link", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter", "nav", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "small", "source", "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "u", "ul", "var", "video", "wbr", "circle", "clipPath", "defs", "ellipse", "foreignObject", "g", "image", "line", "linearGradient", "marker", "mask", "path", "pattern", "polygon", "polyline", "radialGradient", "rect", "stop", "svg", "text", "textPath", "tspan"].forEach(function(e) {
   He[e] = He(e);
 });
+var $e = function() {
+  function e(e2, t2) {
+    this.rules = e2, this.componentId = t2, this.isStatic = re(e2), Z.registerId(this.componentId + 1);
+  }
+  var t = e.prototype;
+  return t.createStyles = function(e2, t2, n, r) {
+    var o = r(Ne(this.rules, t2, n, r).join(""), ""), s = this.componentId + e2;
+    n.insertRules(s, s, o);
+  }, t.removeStyles = function(e2, t2) {
+    t2.clearRules(this.componentId + e2);
+  }, t.renderStyles = function(e2, t2, n, r) {
+    e2 > 2 && Z.registerId(this.componentId + e2), this.removeStyles(e2, n), this.createStyles(e2, t2, n, r);
+  }, e;
+}();
+function We(e) {
+  for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), o = 1; o < t; o++)
+    n[o - 1] = arguments[o];
+  var i = Ce.apply(void 0, [e].concat(n)), a = "sc-global-" + xe(JSON.stringify(i)), u = new $e(i, a);
+  function l(e2) {
+    var t2 = fe(), n2 = me(), o2 = react.useContext(Ge), l2 = react.useRef(t2.allocateGSInstance(a)).current;
+    return t2.server && h(l2, e2, t2, o2, n2), react.useLayoutEffect(function() {
+      if (!t2.server)
+        return h(l2, e2, t2, o2, n2), function() {
+          return u.removeStyles(l2, t2);
+        };
+    }, [l2, e2, t2, o2, n2]), null;
+  }
+  function h(e2, t2, n2, r, o2) {
+    if (u.isStatic)
+      u.renderStyles(e2, O, n2, o2);
+    else {
+      var s = v({}, t2, {theme: Re(t2, r, l.defaultProps)});
+      u.renderStyles(e2, s, n2, o2);
+    }
+  }
+  return react.memo(l);
+}
 export default He;
+export {We as createGlobalStyle};

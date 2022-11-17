@@ -3,7 +3,6 @@ import styled from "../../../../../../_snowpack/pkg/styled-components.js";
 import {ControlRow, Label, Detail} from "../../../grid.js";
 import {AccentSlider} from "../../../../inputs/accent-slider.js";
 import {ErrorMessage} from "../../../../styled.js";
-import {validateExpression} from "../../../../../utils/macro-api.js";
 import {AccentButton} from "../../../../inputs/accent-button.js";
 import ReactTextareaAutocomplete from "../../../../../../_snowpack/pkg/@webscopeio/react-textarea-autocomplete.js";
 import {
@@ -11,6 +10,7 @@ import {
   AutocompleteLoading,
   findKeycodes
 } from "../../../../inputs/autocomplete-keycode.js";
+import {getMacroValidator} from "../../../../../utils/macro-api/index.js";
 const ToastErrorMessage = styled(ErrorMessage)`
   margin: 0;
   width: 100%;
@@ -20,7 +20,9 @@ const ToastErrorMessage = styled(ErrorMessage)`
     display: none;
   }
 `;
-const Message = styled.div``;
+const Message = styled.div`
+  color: var(--color_accent);
+`;
 const Link = styled.a`
   font-size: 18x !important;
   color: var(--color_accent);
@@ -66,7 +68,8 @@ export const MacroDetailPane = (props) => {
   const [errorMessage, setErrorMessage] = React.useState(void 0);
   const saveMacro = () => {
     const value = appendEnter ? currentValue + enterToken : currentValue;
-    const validationResult = validateExpression(value);
+    const validate = getMacroValidator(props.protocol);
+    const validationResult = validate(value);
     if (validationResult.isValid) {
       props.saveMacros(value);
       setErrorMessage(void 0);
@@ -139,9 +142,9 @@ export const MacroDetailPane = (props) => {
       }
     }
   })), /* @__PURE__ */ React.createElement(AutoHeightRow, null, /* @__PURE__ */ React.createElement(DescriptionLabel, null, /* @__PURE__ */ React.createElement(ToastErrorMessage, null, errorMessage), /* @__PURE__ */ React.createElement(Message, null, "Enter text directly, or wrap", " ", /* @__PURE__ */ React.createElement(Link, {
-    href: "https://beta.docs.qmk.fm/features/keycodes_basic",
+    href: "https://docs.qmk.fm/#/keycodes_basic",
     target: "_blank"
-  }, "Basic Keycodes"), " ", "in ", "{}", "."), /* @__PURE__ */ React.createElement(Message, null, "Single tap: ", "{KC_XXX}", ". Chord: ", "{KC_XXX, KC_YYY, KC_ZZZ}", "."), /* @__PURE__ */ React.createElement(Message, null, "Type ? to search for keycodes.")), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentButton, {
+  }, "Basic Keycodes"), " ", "in ", "{}"), /* @__PURE__ */ React.createElement(Message, null, "Single tap: ", "{KC_XXX}"), /* @__PURE__ */ React.createElement(Message, null, "Chord: ", "{KC_XXX, KC_YYY, KC_ZZZ}"), props.protocol >= 11 ? /* @__PURE__ */ React.createElement(Message, null, "Delay (ms): ", "{NNNN}", " ") : "", /* @__PURE__ */ React.createElement(Message, null, "Type ? to search for keycodes")), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentButton, {
     disabled: currentMacro === (appendEnter ? currentValue + enterToken : currentValue),
     onClick: saveMacro
   }, "Save"))), /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, "Tap 'Enter' at end of macro"), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentSlider, {

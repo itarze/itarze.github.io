@@ -37,6 +37,12 @@ export const getKeyContainerPosition = ({x, y, w, h}) => ({
   width: CSSVarObject.keyXPos * w - CSSVarObject.keyXSpacing,
   height: CSSVarObject.keyYPos * h - CSSVarObject.keyYSpacing
 });
+export const getEncoderKeyContainerPosition = ({x, y, w, h}) => ({
+  left: CSSVarObject.keyXPos * x,
+  top: CSSVarObject.keyYPos * y,
+  width: CSSVarObject.keyXPos * w - CSSVarObject.keyXSpacing,
+  height: CSSVarObject.keyXPos * h - CSSVarObject.keyXSpacing
+});
 export const RotationContainer = styled.div`
   position: absolute;
   ${(props) => props.selected ? "z-index:2;" : ""}

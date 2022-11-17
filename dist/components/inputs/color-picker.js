@@ -1,18 +1,47 @@
 import React, {Component} from "../../../_snowpack/pkg/react.js";
 import styled from "../../../_snowpack/pkg/styled-components.js";
-import styles from "./color.module.css.proxy.js";
 import {
   getRGBPrime,
   toDegrees,
   calcRadialHue,
   calcRadialMagnitude
 } from "../../utils/color-math.js";
+const ColorLens = styled.div`
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid black;
+  opacity: 0.7;
+  background: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  box-sizing: border-box;
+  transform: translate3d(195px, 195px, 0);
+`;
+const ColorInner = styled.div`
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, white, rgba(0, 0, 0, 0));
+`;
+const ColorOuter = styled.div`
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    red,
+    yellow,
+    lime,
+    aqua,
+    blue,
+    magenta,
+    red
+  );
+`;
 export const ColorThumbnail = styled.div`
   display: inline-block;
   height: 20px;
   width: 30px;
   border-radius: 2px;
-  background: ${(props) => props.color};
   border: 2px solid var(--color_dark-grey);
   cursor: pointer;
   &:hover {
@@ -50,7 +79,6 @@ const PickerContainer = styled.div`
   }
 `;
 const ColorPreview = styled.div`
-  background: ${(props) => props.color};
   width: 180px;
   height: 24px;
   border: 4px solid var(--color_dark-grey);
@@ -79,15 +107,17 @@ export class ColorPicker extends Component {
       }
     };
     this.onMouseDown = (evt) => {
-      var _a;
       this.mouseDown = true;
       this.onMouseMove(evt);
-      (_a = this.ref) == null ? void 0 : _a.classList.add(styles.mouseDown);
+      if (this.ref) {
+        this.ref.style.cursor = "pointer";
+      }
     };
     this.onMouseUp = (evt) => {
-      var _a;
       this.mouseDown = false;
-      (_a = this.ref) == null ? void 0 : _a.classList.remove(styles.mouseDown);
+      if (this.ref) {
+        this.ref.style.cursor = "auto";
+      }
     };
     this.onThumbnailClick = () => {
       this.setState({showPicker: true});
@@ -148,21 +178,17 @@ export class ColorPicker extends Component {
     return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(ColorThumbnail, {
       ref: this.colorThumbnail,
       onClick: this.onThumbnailClick,
-      color
+      style: {background: color}
     }), this.state.showPicker && /* @__PURE__ */ React.createElement(PickerContainer, {
       ref: this.pickerContainer,
       onMouseUp: this.onMouseUp
     }, /* @__PURE__ */ React.createElement(ColorPreview, {
-      color: this.getRGB(this.props.color)
-    }), /* @__PURE__ */ React.createElement(Container, null, /* @__PURE__ */ React.createElement("div", {
+      style: {background: this.getRGB(this.props.color)}
+    }), /* @__PURE__ */ React.createElement(Container, null, /* @__PURE__ */ React.createElement(ColorOuter, {
       onMouseDown: this.onMouseDown,
       onMouseMove: this.onMouseMove,
-      ref: (ref) => this.ref = ref,
-      className: styles.outer
-    }, /* @__PURE__ */ React.createElement("div", {
-      className: styles.inner
-    }, /* @__PURE__ */ React.createElement("div", {
-      className: styles.lens,
+      ref: (ref) => this.ref = ref
+    }, /* @__PURE__ */ React.createElement(ColorInner, null, /* @__PURE__ */ React.createElement(ColorLens, {
       style: {transform: this.state.lensTransform}
     }))))));
   }

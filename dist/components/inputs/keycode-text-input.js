@@ -1,6 +1,5 @@
 import React from "../../../_snowpack/pkg/react.js";
 import styled from "../../../_snowpack/pkg/styled-components.js";
-import basicKeyToByte from "../../utils/key-to-byte.json.proxy.js";
 import {
   advancedStringToKeycode,
   anyKeycodeToString
@@ -36,13 +35,13 @@ export class KeycodeTextInput extends React.Component {
       this.setState({currentValue: value});
     };
     this.handleBlur = (e) => {
-      const {onBlur} = this.props;
+      const {onBlur, basicKeyToByte: basicKeyToByte2} = this.props;
       const {lastDefault} = this.state;
       const value = e.target.value.trim().toUpperCase();
-      const advancedParsed = advancedStringToKeycode(value);
-      if (Object.keys(basicKeyToByte).includes(value)) {
-        if (lastDefault !== basicKeyToByte[value]) {
-          onBlur(basicKeyToByte[value]);
+      const advancedParsed = advancedStringToKeycode(value, basicKeyToByte2);
+      if (Object.keys(basicKeyToByte2).includes(value)) {
+        if (lastDefault !== basicKeyToByte2[value]) {
+          onBlur(basicKeyToByte2[value]);
         }
         this.setState({isError: false});
       } else if (advancedParsed !== 0) {
@@ -57,8 +56,8 @@ export class KeycodeTextInput extends React.Component {
         this.setState({isError: true});
       }
     };
-    const {defaultValue} = props;
-    let currentValue = anyKeycodeToString(defaultValue);
+    const {defaultValue, basicKeyToByte, byteToKey} = props;
+    let currentValue = anyKeycodeToString(defaultValue, basicKeyToByte, byteToKey);
     this.state = {
       lastDefault: defaultValue,
       defaultValueAsString: currentValue,
@@ -71,7 +70,7 @@ export class KeycodeTextInput extends React.Component {
     if (state.lastDefault !== props.defaultValue && state.currentParsed !== props.defaultValue) {
       return {
         ...state,
-        currentValue: anyKeycodeToString(props.defaultValue),
+        currentValue: anyKeycodeToString(props.defaultValue, props.basicKeyToByte, props.byteToKey),
         currentParsed: props.defaultValue,
         lastDefault: props.defaultValue
       };

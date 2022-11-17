@@ -2,7 +2,6 @@ import React, {useState} from "../../../_snowpack/pkg/react.js";
 import styled from "../../../_snowpack/pkg/styled-components.js";
 import {AccentButton} from "./accent-button.js";
 import {AutocompleteItem} from "./autocomplete-keycode.js";
-import basicKeyToByte from "../../utils/key-to-byte.json.proxy.js";
 import {
   anyKeycodeToString,
   advancedStringToKeycode
@@ -11,7 +10,10 @@ import {useCombobox} from "../../../_snowpack/pkg/downshift.js";
 import TextInput from "./text-input.js";
 import {getKeycodesForKeyboard} from "../../utils/key.js";
 import {useAppSelector} from "../../store/hooks.js";
-import {getSelectedDefinition} from "../../store/definitionsSlice.js";
+import {
+  getBasicKeyToByte,
+  getSelectedDefinition
+} from "../../store/definitionsSlice.js";
 const ModalBackground = styled.div`
   position: fixed;
   top: 0;
@@ -68,21 +70,21 @@ function isHex(input) {
   const parsed = parseInt(lowercased, 16);
   return `0x${parsed.toString(16).toLowerCase()}` === lowercased;
 }
-function inputIsBasicByte(input) {
+function inputIsBasicByte(input, basicKeyToByte) {
   const keyCode = input.trim().toUpperCase();
   return keyCode in basicKeyToByte;
 }
-function basicByteFromInput(input) {
+function basicByteFromInput(input, basicKeyToByte) {
   const keyCode = input.trim().toUpperCase();
   return basicKeyToByte[keyCode];
 }
-function inputIsAdvancedKeyCode(input) {
+function inputIsAdvancedKeyCode(input, basicKeyToByte) {
   const keyCode = input.trim().toUpperCase();
-  return advancedStringToKeycode(keyCode) !== 0;
+  return advancedStringToKeycode(keyCode, basicKeyToByte) !== 0;
 }
-function advancedKeyCodeFromInput(input) {
+function advancedKeyCodeFromInput(input, basicKeyToByte) {
   const keyCode = input.trim().toUpperCase();
-  return advancedStringToKeycode(keyCode);
+  return advancedStringToKeycode(keyCode, basicKeyToByte);
 }
 function inputIsHex(input) {
   return isHex(input.trim());
@@ -91,15 +93,15 @@ function hexFromInput(input) {
   const lowercased = input.toLowerCase();
   return parseInt(lowercased, 16);
 }
-function inputIsValid(input) {
-  return inputIsBasicByte(input) || inputIsAdvancedKeyCode(input) || inputIsHex(input);
+function inputIsValid(input, basicKeyToByte) {
+  return inputIsBasicByte(input, basicKeyToByte) || inputIsAdvancedKeyCode(input, basicKeyToByte) || inputIsHex(input);
 }
-function keycodeFromInput(input) {
-  if (inputIsBasicByte(input)) {
-    return basicByteFromInput(input);
+function keycodeFromInput(input, basicKeyToByte) {
+  if (inputIsBasicByte(input, basicKeyToByte)) {
+    return basicByteFromInput(input, basicKeyToByte);
   }
-  if (inputIsAdvancedKeyCode(input)) {
-    return advancedKeyCodeFromInput(input);
+  if (inputIsAdvancedKeyCode(input, basicKeyToByte)) {
+    return advancedKeyCodeFromInput(input, basicKeyToByte);
   }
   if (inputIsHex(input)) {
     return hexFromInput(input);
@@ -115,12 +117,13 @@ const getInputItems = (arr) => arr.map((k) => {
 });
 export const KeycodeModal = (props) => {
   const selectedDefinition = useAppSelector(getSelectedDefinition);
+  const {basicKeyToByte, byteToKey} = useAppSelector(getBasicKeyToByte);
   if (!selectedDefinition) {
     return null;
   }
   const supportedInputItems = getInputItems(getKeycodesForKeyboard(selectedDefinition));
   const [inputItems, setInputItems] = useState(supportedInputItems);
-  const defaultInput = anyKeycodeToString(props.defaultValue);
+  const defaultInput = anyKeycodeToString(props.defaultValue, basicKeyToByte, byteToKey);
   const {
     getMenuProps,
     getComboboxProps,
@@ -141,7 +144,7 @@ export const KeycodeModal = (props) => {
       setInputItems(supportedInputItems.filter(({label, code}) => [label, code].flatMap((s) => s.split(/\s+/)).map((s) => s.toLowerCase()).some((s) => s.startsWith((inputValue2 != null ? inputValue2 : "").toLowerCase()))));
     }
   });
-  const isValid = inputIsValid(inputValue);
+  const isValid = inputIsValid(inputValue, basicKeyToByte);
   return /* @__PURE__ */ React.createElement(ModalBackground, null, /* @__PURE__ */ React.createElement(ModalContainer, null, /* @__PURE__ */ React.createElement(PromptText, null, "Please enter your desired QMK keycode or hex code:"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", {
     ...getComboboxProps()
   }, /* @__PURE__ */ React.createElement(TextInput, {
@@ -162,7 +165,7 @@ export const KeycodeModal = (props) => {
   }))))), /* @__PURE__ */ React.createElement(RowDiv, null, /* @__PURE__ */ React.createElement(AccentButton, {
     disabled: !isValid,
     onClick: () => {
-      props.onConfirm(keycodeFromInput(inputValue));
+      props.onConfirm(keycodeFromInput(inputValue, basicKeyToByte));
     }
   }, "Confirm"), /* @__PURE__ */ React.createElement(AccentButton, {
     onClick: props.onExit

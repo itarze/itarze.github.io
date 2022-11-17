@@ -10,7 +10,8 @@ import {
   reloadDefinitions,
   loadLayoutOptions,
   updateDefinitions,
-  getDefinitions
+  getDefinitions,
+  getBasicKeyToByte
 } from "./definitionsSlice.js";
 import {loadKeymapFromDevice} from "./keymapSlice.js";
 import {updateLightingData} from "./lightingSlice.js";
@@ -40,8 +41,9 @@ const validateDefinitionAvailable = async ({device, requiredDefinitionVersion, v
 };
 export const selectConnectedDevice = (connectedDevice) => async (dispatch, getState) => {
   await validateDefinitionAvailable(connectedDevice, getDefinitions(getState()));
+  const {basicKeyToByte} = getBasicKeyToByte(getState());
   dispatch(selectDevice(connectedDevice));
-  dispatch(loadMacros(connectedDevice));
+  dispatch(loadMacros(connectedDevice, basicKeyToByte));
   dispatch(loadLayoutOptions());
   const {protocol} = connectedDevice;
   if (protocol < 11) {

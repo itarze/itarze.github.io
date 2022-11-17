@@ -2,6 +2,7 @@
   "imports": {
     "@fortawesome/free-solid-svg-icons": "./@fortawesome/free-solid-svg-icons.js",
     "@fortawesome/react-fontawesome": "./@fortawesome/react-fontawesome.js",
+    "@microsoft/applicationinsights-web": "./@microsoft/applicationinsights-web.js",
     "@reduxjs/toolkit": "./@reduxjs/toolkit.js",
     "@webscopeio/react-textarea-autocomplete": "./@webscopeio/react-textarea-autocomplete.js",
     "@webscopeio/react-textarea-autocomplete/style.css": "./@webscopeio/react-textarea-autocomplete/style.css",
@@ -10,8 +11,6 @@
     "lodash.partition": "./lodash.partition.js",
     "pelpi": "./pelpi.js",
     "raf-schd": "./raf-schd.js",
-    "rc-slider": "./rc-slider.js",
-    "rc-slider/assets/index.css": "./rc-slider/assets/index.css",
     "react": "./react.js",
     "react-dom": "./react-dom.js",
     "react-redux": "./react-redux.js",

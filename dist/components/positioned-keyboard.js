@@ -15,6 +15,7 @@ import {getBoundingBox} from "../../_snowpack/pkg/via-reader.js";
 import {getThemeFromStore} from "../utils/device-store.js";
 import {useAppSelector} from "../store/hooks.js";
 import {
+  getBasicKeyToByte,
   getSelectedDefinition,
   getSelectedKeyDefinitions
 } from "../store/definitionsSlice.js";
@@ -33,9 +34,7 @@ import {
   noop,
   RotationContainer
 } from "./positioned-keyboard/base.js";
-import {
-  EncoderKeyComponent
-} from "./positioned-keyboard/encoder-key.js";
+import {EncoderKeyComponent} from "./positioned-keyboard/encoder-key.js";
 import {Matrix} from "./positioned-keyboard/matrix.js";
 export const CSSVarObject = {
   keyWidth: 52,
@@ -278,14 +277,14 @@ const getTooltipData = ({
   macroExpression,
   label
 }) => label && label.length > 15 ? {"data-tip": label} : macroExpression && macroExpression.length ? {"data-tip": macroExpression} : {};
-export const getLabel = (keycodeByte, width, macros, selectedDefinition) => {
+export const getLabel = (keycodeByte, width, macros, selectedDefinition, basicKeyToByte, byteToKey) => {
   var _a;
   let label = "";
-  if (isUserKeycodeByte(keycodeByte) && (selectedDefinition == null ? void 0 : selectedDefinition.customKeycodes)) {
-    const userKeycodeIdx = getUserKeycodeIndex(keycodeByte);
+  if (isUserKeycodeByte(keycodeByte, basicKeyToByte) && (selectedDefinition == null ? void 0 : selectedDefinition.customKeycodes)) {
+    const userKeycodeIdx = getUserKeycodeIndex(keycodeByte, basicKeyToByte);
     label = getShortNameForKeycode(selectedDefinition.customKeycodes[userKeycodeIdx]);
   } else if (keycodeByte) {
-    label = (_a = getLabelForByte(keycodeByte, width * 100)) != null ? _a : "";
+    label = (_a = getLabelForByte(keycodeByte, width * 100, basicKeyToByte, byteToKey)) != null ? _a : "";
   }
   let macroExpression;
   if (isMacro(label)) {
@@ -333,6 +332,7 @@ export const PositionedKeyboard = (props) => {
   const {selectable, containerDimensions} = props;
   const dispatch = useDispatch();
   const selectedKey = useAppSelector(getSelectedKey);
+  const {basicKeyToByte, byteToKey} = useAppSelector(getBasicKeyToByte);
   const matrixKeycodes = useAppSelector((state) => getSelectedKeymap(state) || []);
   const macros = useAppSelector((state) => state.macros);
   const keys = useAppSelector(getSelectedKeyDefinitions);
@@ -354,7 +354,7 @@ export const PositionedKeyboard = (props) => {
     return /* @__PURE__ */ React.createElement(KeyboardKeyComponent, {
       ...{
         ...k,
-        ...getLabel(matrixKeycodes[index], k.w, macros, selectedDefinition),
+        ...getLabel(matrixKeycodes[index], k.w, macros, selectedDefinition, basicKeyToByte, byteToKey),
         ...getColors(k.color),
         selected: selectedKey === index,
         onClick: selectable ? (id) => {
@@ -446,6 +446,7 @@ const BlankPositionedKeyboardComponent = (props) => {
     matrixKeycodes = [],
     macros
   } = props;
+  const {basicKeyToByte, byteToKey} = useAppSelector(getBasicKeyToByte);
   if (!selectedDefinition)
     return null;
   const pressedKeys = {};
@@ -470,7 +471,7 @@ const BlankPositionedKeyboardComponent = (props) => {
     return /* @__PURE__ */ React.createElement(KeyboardKeyComponent, {
       ...{
         ...k,
-        ...getLabel(matrixKeycodes[index], k.w, macros, selectedDefinition),
+        ...getLabel(matrixKeycodes[index], k.w, macros, selectedDefinition, basicKeyToByte, byteToKey),
         ...getColors(k.color),
         selected: pressedKeys[index]
       },

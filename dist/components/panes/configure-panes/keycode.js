@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "../../../../_snowpack/pkg/react.js";
+import React, {useState, useEffect, useMemo} from "../../../../_snowpack/pkg/react.js";
 import styled from "../../../../_snowpack/pkg/styled-components.js";
-import styles from "../../menus/keycode-menu.module.css.proxy.js";
 import {Button} from "../../inputs/button.js";
 import {KeycodeModal} from "../../inputs/custom-keycode-modal.js";
 import {title, component} from "../../icons/keyboard.js";
@@ -24,6 +23,7 @@ import {getNextKey} from "../../positioned-keyboard.js";
 import {useDispatch} from "../../../../_snowpack/pkg/react-redux.js";
 import {useAppSelector} from "../../../store/hooks.js";
 import {
+  getBasicKeyToByte,
   getSelectedDefinition,
   getSelectedKeyDefinitions
 } from "../../../store/definitionsSlice.js";
@@ -63,6 +63,7 @@ const Keycode = styled(Button)`
   background: var(--color_dark-grey);
   color: var(--color_light_grey);
   margin: 0;
+  ${(props) => props.disabled && `cursor:not-allowed;filter:opacity(50%);`}
 `;
 const CustomKeycode = styled(Button)`
   border-radius: 2px;
@@ -101,7 +102,7 @@ const Link = styled.a`
   color: var(--color_accent);
   text-decoration: underline;
 `;
-const KeycodeCategories = getKeycodes().concat(getOtherMenu()).filter((menu) => !["Other", "Mod+_"].includes(menu.label));
+const generateKeycodeCategories = (basicKeyToByte) => getKeycodes().concat(getOtherMenu(basicKeyToByte)).filter((menu) => !["Mod+_"].includes(menu.label));
 const maybeFilter = (maybe, filter) => maybe ? () => true : filter;
 export const Pane = () => {
   const selectedKey = useAppSelector(getSelectedKey);
@@ -126,6 +127,8 @@ export const KeycodePane = () => {
   const disableFastRemap = useAppSelector(getDisableFastRemap);
   const selectedKeyDefinitions = useAppSelector(getSelectedKeyDefinitions);
   const layerCount = useAppSelector(getNumberOfLayers);
+  const {basicKeyToByte} = useAppSelector(getBasicKeyToByte);
+  const KeycodeCategories = useMemo(() => generateKeycodeCategories(basicKeyToByte), [basicKeyToByte]);
   if (!selectedDefinition || !selectedDevice || !matrixKeycodes) {
     return null;
   }
@@ -187,23 +190,18 @@ export const KeycodePane = () => {
     if (code == "text") {
       setShowKeyTextInputModal(true);
     } else {
-      return keycodeInMaster(code) && updateKey(getByteForCode(code));
+      return keycodeInMaster(code, basicKeyToByte) && updateKey(getByteForCode(code, basicKeyToByte));
     }
   };
   const renderKeycode = (keycode, index) => {
     const {code, title: title2, name} = keycode;
     return /* @__PURE__ */ React.createElement(Keycode, {
-      className: [
-        !keycodeInMaster(code) && code != "text" && styles.disabled,
-        styles.keycode
-      ].join(" "),
       key: code,
+      disabled: !keycodeInMaster(code, basicKeyToByte) && code != "text",
       onClick: () => handleClick(code, index),
       onMouseOver: (_) => setMouseOverDesc(title2 ? `${code}: ${title2}` : code),
       onMouseOut: (_) => setMouseOverDesc(null)
-    }, /* @__PURE__ */ React.createElement("div", {
-      className: styles.innerKeycode
-    }, name));
+    }, /* @__PURE__ */ React.createElement("div", null, name));
   };
   const renderCustomKeycode = () => {
     return /* @__PURE__ */ React.createElement(CustomKeycode, {

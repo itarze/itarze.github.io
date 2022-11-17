@@ -380,6 +380,3 @@ a:hover {
     stroke: var(--color_accent);
   }
 }
-.rc-slider-handle:focus {
-  box-shadow: none;
-}

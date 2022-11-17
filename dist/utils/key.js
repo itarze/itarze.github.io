@@ -1,4 +1,3 @@
-import basicKeyToByte from "./key-to-byte.json.proxy.js";
 import {
   advancedKeycodeToString,
   advancedStringToKeycode
@@ -22,14 +21,14 @@ export function isNumericSymbol(label) {
 export function isMacro(label) {
   return /^M\d+$/.test(label);
 }
-export function getByteForCode(code) {
+export function getByteForCode(code, basicKeyToByte) {
   const byte = basicKeyToByte[code];
   if (byte !== void 0) {
     return byte;
   } else if (isLayerCode(code)) {
     return getByteForLayerCode(code);
-  } else if (advancedStringToKeycode(code) !== null) {
-    return advancedStringToKeycode(code);
+  } else if (advancedStringToKeycode(code, basicKeyToByte) !== null) {
+    return advancedStringToKeycode(code, basicKeyToByte);
   }
   throw `Could not find byte for ${code}`;
 }
@@ -92,46 +91,43 @@ function getCodeForLayerByte(byte) {
   }
 }
 export const keycodesList = getKeycodes().reduce((p, n) => p.concat(n.keycodes), []);
-console.log("correct list", Object.keys(basicKeyToByte).filter((key) => keycodesList.map(({code}) => code).includes(key)));
-console.log("missing list", Object.keys(basicKeyToByte).filter((key) => !keycodesList.map(({code}) => code).includes(key)));
-export const byteToKey = Object.keys(basicKeyToByte).reduce((p, n) => {
+export const getByteToKey = (basicKeyToByte) => Object.keys(basicKeyToByte).reduce((p, n) => {
   const key = basicKeyToByte[n];
   if (key in p) {
     const basicKeycode = keycodesList.find(({code}) => code === n);
     if (basicKeycode) {
       return {...p, [key]: basicKeycode.code};
     }
-    console.log("skipping:", n);
     return p;
   }
   return {...p, [key]: n};
 }, {});
-export function getCodeForByte(byte) {
+export function getCodeForByte(byte, basicKeyToByte, byteToKey) {
   const keycode = byteToKey[byte];
   if (keycode) {
     return keycode;
   } else if (isLayerKey(byte)) {
     return getCodeForLayerByte(byte);
-  } else if (advancedKeycodeToString(byte) !== null) {
-    return advancedKeycodeToString(byte);
+  } else if (advancedKeycodeToString(byte, basicKeyToByte, byteToKey) !== null) {
+    return advancedKeycodeToString(byte, basicKeyToByte, byteToKey);
   } else {
     return "0x" + Number(byte).toString(16);
   }
 }
-export function keycodeInMaster(keycode) {
+export function keycodeInMaster(keycode, basicKeyToByte) {
   return keycode in basicKeyToByte || isLayerCode(keycode);
 }
 function shorten(str) {
   return str.split(" ").map((word) => word.slice(0, 1) + word.slice(1).replace(/[aeiou ]/gi, "")).join("");
 }
-export function isUserKeycodeByte(byte) {
+export function isUserKeycodeByte(byte, basicKeyToByte) {
   return byte >= basicKeyToByte.USER00 && byte <= basicKeyToByte.USER15;
 }
-export function getUserKeycodeIndex(byte) {
+export function getUserKeycodeIndex(byte, basicKeyToByte) {
   return byte - basicKeyToByte.USER00;
 }
-export function getLabelForByte(byte, size = 100) {
-  const keycode = getCodeForByte(byte);
+export function getLabelForByte(byte, size = 100, basicKeyToByte, byteToKey) {
+  const keycode = getCodeForByte(byte, basicKeyToByte, byteToKey);
   const basicKeycode = keycodesList.find(({code}) => code === keycode);
   if (!basicKeycode) {
     return keycode;
@@ -534,13 +530,13 @@ export function mapEvtToKeycode(evt) {
 function isLayerKey(byte) {
   return [QK_DF, QK_MO, QK_OSL, QK_TG, QK_TO, QK_TT].some((code) => byte >= code && byte <= (code | 255));
 }
-export function getKeycodeForByte(byte) {
+export function getKeycodeForByte(byte, basicKeyToByte, byteToKey) {
   const keycode = byteToKey[byte];
   const basicKeycode = keycodesList.find(({code}) => code === keycode);
-  const advancedString = advancedKeycodeToString(byte);
+  const advancedString = advancedKeycodeToString(byte, basicKeyToByte, byteToKey);
   return basicKeycode && basicKeycode.code || advancedString || keycode;
 }
-export function getOtherMenu() {
+export function getOtherMenu(basicKeyToByte) {
   const keycodes = Object.keys(basicKeyToByte).filter((key) => !keycodesList.map(({code}) => code).includes(key)).map((code) => ({
     name: code.replace("KC_", "").replace(/_/g, " "),
     code
@@ -1140,6 +1136,9 @@ export function getKeycodes() {
         {name: "Mouse Btn3", code: "KC_MS_BTN3"},
         {name: "Mouse Btn4", code: "KC_MS_BTN4"},
         {name: "Mouse Btn5", code: "KC_MS_BTN5"},
+        {name: "Mouse Btn6", code: "KC_MS_BTN6"},
+        {name: "Mouse Btn7", code: "KC_MS_BTN7"},
+        {name: "Mouse Btn8", code: "KC_MS_BTN8"},
         {name: "Mouse Wh ↑", code: "KC_MS_WH_UP"},
         {name: "Mouse Wh ↓", code: "KC_MS_WH_DOWN"},
         {name: "Mouse Wh ←", code: "KC_MS_WH_LEFT"},
