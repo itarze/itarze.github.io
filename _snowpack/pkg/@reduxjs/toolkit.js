@@ -1,5 +1,5 @@
 import {p as process} from "../common/process-2545f00a.js";
-import {_ as _defineProperty} from "../common/defineProperty-8af9ee69.js";
+import {_ as _defineProperty} from "../common/defineProperty-8b265947.js";
 function n(n2) {
   for (var r2 = arguments.length, t2 = Array(r2 > 1 ? r2 - 1 : 0), e = 1; e < r2; e++)
     t2[e - 1] = arguments[e];
@@ -1329,7 +1329,7 @@ var addListener = createAction(alm + "/add");
 var clearAllListeners = createAction(alm + "/removeAll");
 var removeListener = createAction(alm + "/remove");
 var promise;
-var queueMicrotaskShim = typeof queueMicrotask === "function" ? queueMicrotask.bind(typeof window !== "undefined" ? window : global) : function(cb) {
+var queueMicrotaskShim = typeof queueMicrotask === "function" ? queueMicrotask.bind(typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : globalThis) : function(cb) {
   return (promise || (promise = Promise.resolve())).then(cb).catch(function(err) {
     return setTimeout(function() {
       throw err;

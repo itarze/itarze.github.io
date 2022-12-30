@@ -171,42 +171,42 @@ function n$1(t2, n2) {
   }
   return false;
 }
-function r$1(t2, e2, n2, r2, i, o, l2, d2) {
-  return o < t2 && l2 > e2 || o > t2 && l2 < e2 ? 0 : o <= t2 && d2 <= n2 || l2 >= e2 && d2 >= n2 ? o - t2 - r2 : l2 > e2 && d2 < n2 || o < t2 && d2 > n2 ? l2 - e2 + i : 0;
+function r$1(t2, e2, n2, r2, i2, o, l2, d2) {
+  return o < t2 && l2 > e2 || o > t2 && l2 < e2 ? 0 : o <= t2 && d2 <= n2 || l2 >= e2 && d2 >= n2 ? o - t2 - r2 : l2 > e2 && d2 < n2 || o < t2 && d2 > n2 ? l2 - e2 + i2 : 0;
 }
-function computeScrollIntoView(e2, i) {
-  var o = window, l2 = i.scrollMode, d2 = i.block, u2 = i.inline, h2 = i.boundary, a = i.skipOverflowHiddenElements, c2 = typeof h2 == "function" ? h2 : function(t2) {
+var i = function(e2, i2) {
+  var o = window, l2 = i2.scrollMode, d2 = i2.block, f2 = i2.inline, h2 = i2.boundary, u2 = i2.skipOverflowHiddenElements, s = typeof h2 == "function" ? h2 : function(t2) {
     return t2 !== h2;
   };
   if (!t(e2))
     throw new TypeError("Invalid target");
-  for (var f2 = document.scrollingElement || document.documentElement, s = [], p2 = e2; t(p2) && c2(p2); ) {
-    if ((p2 = p2.parentElement) === f2) {
-      s.push(p2);
+  for (var a, c2, g2 = document.scrollingElement || document.documentElement, p2 = [], m2 = e2; t(m2) && s(m2); ) {
+    if ((m2 = (c2 = (a = m2).parentElement) == null ? a.getRootNode().host || null : c2) === g2) {
+      p2.push(m2);
       break;
     }
-    p2 != null && p2 === document.body && n$1(p2) && !n$1(document.documentElement) || p2 != null && n$1(p2, a) && s.push(p2);
+    m2 != null && m2 === document.body && n$1(m2) && !n$1(document.documentElement) || m2 != null && n$1(m2, u2) && p2.push(m2);
   }
-  for (var m2 = o.visualViewport ? o.visualViewport.width : innerWidth, g2 = o.visualViewport ? o.visualViewport.height : innerHeight, w2 = window.scrollX || pageXOffset, v2 = window.scrollY || pageYOffset, W = e2.getBoundingClientRect(), b2 = W.height, H2 = W.width, y2 = W.top, E2 = W.right, M = W.bottom, V = W.left, x = d2 === "start" || d2 === "nearest" ? y2 : d2 === "end" ? M : y2 + b2 / 2, I2 = u2 === "center" ? V + H2 / 2 : u2 === "end" ? E2 : V, C2 = [], T = 0; T < s.length; T++) {
-    var k2 = s[T], B2 = k2.getBoundingClientRect(), D2 = B2.height, O = B2.width, R = B2.top, X = B2.right, Y = B2.bottom, L = B2.left;
-    if (l2 === "if-needed" && y2 >= 0 && V >= 0 && M <= g2 && E2 <= m2 && y2 >= R && M <= Y && V >= L && E2 <= X)
-      return C2;
-    var S = getComputedStyle(k2), j = parseInt(S.borderLeftWidth, 10), q2 = parseInt(S.borderTopWidth, 10), z2 = parseInt(S.borderRightWidth, 10), A2 = parseInt(S.borderBottomWidth, 10), F2 = 0, G2 = 0, J = "offsetWidth" in k2 ? k2.offsetWidth - k2.clientWidth - j - z2 : 0, K = "offsetHeight" in k2 ? k2.offsetHeight - k2.clientHeight - q2 - A2 : 0;
-    if (f2 === k2)
-      F2 = d2 === "start" ? x : d2 === "end" ? x - g2 : d2 === "nearest" ? r$1(v2, v2 + g2, g2, q2, A2, v2 + x, v2 + x + b2, b2) : x - g2 / 2, G2 = u2 === "start" ? I2 : u2 === "center" ? I2 - m2 / 2 : u2 === "end" ? I2 - m2 : r$1(w2, w2 + m2, m2, j, z2, w2 + I2, w2 + I2 + H2, H2), F2 = Math.max(0, F2 + v2), G2 = Math.max(0, G2 + w2);
+  for (var w2 = o.visualViewport ? o.visualViewport.width : innerWidth, v2 = o.visualViewport ? o.visualViewport.height : innerHeight, W = window.scrollX || pageXOffset, H2 = window.scrollY || pageYOffset, b2 = e2.getBoundingClientRect(), y2 = b2.height, E2 = b2.width, M = b2.top, V = b2.right, x = b2.bottom, I2 = b2.left, C2 = d2 === "start" || d2 === "nearest" ? M : d2 === "end" ? x : M + y2 / 2, R = f2 === "center" ? I2 + E2 / 2 : f2 === "end" ? V : I2, T = [], k2 = 0; k2 < p2.length; k2++) {
+    var B2 = p2[k2], D2 = B2.getBoundingClientRect(), O = D2.height, X = D2.width, Y = D2.top, L = D2.right, S = D2.bottom, j = D2.left;
+    if (l2 === "if-needed" && M >= 0 && I2 >= 0 && x <= v2 && V <= w2 && M >= Y && x <= S && I2 >= j && V <= L)
+      return T;
+    var N = getComputedStyle(B2), q2 = parseInt(N.borderLeftWidth, 10), z2 = parseInt(N.borderTopWidth, 10), A2 = parseInt(N.borderRightWidth, 10), F2 = parseInt(N.borderBottomWidth, 10), G2 = 0, J = 0, K = "offsetWidth" in B2 ? B2.offsetWidth - B2.clientWidth - q2 - A2 : 0, P = "offsetHeight" in B2 ? B2.offsetHeight - B2.clientHeight - z2 - F2 : 0, Q = "offsetWidth" in B2 ? B2.offsetWidth === 0 ? 0 : X / B2.offsetWidth : 0, U = "offsetHeight" in B2 ? B2.offsetHeight === 0 ? 0 : O / B2.offsetHeight : 0;
+    if (g2 === B2)
+      G2 = d2 === "start" ? C2 : d2 === "end" ? C2 - v2 : d2 === "nearest" ? r$1(H2, H2 + v2, v2, z2, F2, H2 + C2, H2 + C2 + y2, y2) : C2 - v2 / 2, J = f2 === "start" ? R : f2 === "center" ? R - w2 / 2 : f2 === "end" ? R - w2 : r$1(W, W + w2, w2, q2, A2, W + R, W + R + E2, E2), G2 = Math.max(0, G2 + H2), J = Math.max(0, J + W);
     else {
-      F2 = d2 === "start" ? x - R - q2 : d2 === "end" ? x - Y + A2 + K : d2 === "nearest" ? r$1(R, Y, D2, q2, A2 + K, x, x + b2, b2) : x - (R + D2 / 2) + K / 2, G2 = u2 === "start" ? I2 - L - j : u2 === "center" ? I2 - (L + O / 2) + J / 2 : u2 === "end" ? I2 - X + z2 + J : r$1(L, X, O, j, z2 + J, I2, I2 + H2, H2);
-      var N = k2.scrollLeft, P = k2.scrollTop;
-      x += P - (F2 = Math.max(0, Math.min(P + F2, k2.scrollHeight - D2 + K))), I2 += N - (G2 = Math.max(0, Math.min(N + G2, k2.scrollWidth - O + J)));
+      G2 = d2 === "start" ? C2 - Y - z2 : d2 === "end" ? C2 - S + F2 + P : d2 === "nearest" ? r$1(Y, S, O, z2, F2 + P, C2, C2 + y2, y2) : C2 - (Y + O / 2) + P / 2, J = f2 === "start" ? R - j - q2 : f2 === "center" ? R - (j + X / 2) + K / 2 : f2 === "end" ? R - L + A2 + K : r$1(j, L, X, q2, A2 + K, R, R + E2, E2);
+      var Z = B2.scrollLeft, $ = B2.scrollTop;
+      C2 += $ - (G2 = Math.max(0, Math.min($ + G2 / U, B2.scrollHeight - O / U + P))), R += Z - (J = Math.max(0, Math.min(Z + J / Q, B2.scrollWidth - X / Q + K)));
     }
-    C2.push({el: k2, top: F2, left: G2});
+    T.push({el: B2, top: G2, left: J});
   }
-  return C2;
-}
+  return T;
+};
 var __assign = function() {
   __assign = Object.assign || function __assign2(t2) {
-    for (var s, i = 1, n2 = arguments.length; i < n2; i++) {
-      s = arguments[i];
+    for (var s, i2 = 1, n2 = arguments.length; i2 < n2; i2++) {
+      s = arguments[i2];
       for (var p2 in s)
         if (Object.prototype.hasOwnProperty.call(s, p2))
           t2[p2] = s[p2];
@@ -222,7 +222,7 @@ function scrollIntoView(node, menuNode) {
   if (!node) {
     return;
   }
-  const actions = computeScrollIntoView(node, {
+  const actions = i(node, {
     boundary: menuNode,
     block: "nearest",
     scrollMode: "if-needed"

@@ -3,8 +3,8 @@ import {R as React, r as react} from "./common/index-86c632b0.js";
 import {m as memoize} from "./common/emotion-memoize.esm-69314c55.js";
 import {c as createCommonjsModule, g as getDefaultExportFromCjs} from "./common/_commonjsHelpers-8c19dec8.js";
 import "./common/hoist-non-react-statics.cjs-ec82709f.js";
+import {a as _toPropertyKey, b as _typeof, _ as _defineProperty$1} from "./common/defineProperty-8b265947.js";
 import {p as propTypes} from "./common/index-8ab56611.js";
-import {_ as _defineProperty$1} from "./common/defineProperty-8af9ee69.js";
 import {r as reactDom} from "./common/index-89b0786f.js";
 function sheetForTag(tag) {
   if (tag.sheet) {
@@ -1207,14 +1207,6 @@ function _objectWithoutProperties(source, excluded) {
   }
   return target;
 }
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-  return _typeof = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(obj2) {
-    return typeof obj2;
-  } : function(obj2) {
-    return obj2 && typeof Symbol == "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-  }, _typeof(obj);
-}
 var AutosizeInput_1 = createCommonjsModule(function(module, exports) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -1499,7 +1491,7 @@ function _defineProperties(target, props) {
     descriptor.configurable = true;
     if ("value" in descriptor)
       descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+    Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
   }
 }
 function _createClass(Constructor, protoProps, staticProps) {
@@ -2611,9 +2603,8 @@ var defaultComponents = function defaultComponents2(props) {
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length)
     len = arr.length;
-  for (var i2 = 0, arr2 = new Array(len); i2 < len; i2++) {
+  for (var i2 = 0, arr2 = new Array(len); i2 < len; i2++)
     arr2[i2] = arr[i2];
-  }
   return arr2;
 }
 function _arrayWithoutHoles(arr) {
@@ -4888,9 +4879,8 @@ var arrayLikeToArray = createCommonjsModule(function(module) {
   function _arrayLikeToArray2(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
-    for (var i2 = 0, arr2 = new Array(len); i2 < len; i2++) {
+    for (var i2 = 0, arr2 = new Array(len); i2 < len; i2++)
       arr2[i2] = arr[i2];
-    }
     return arr2;
   }
   module.exports = _arrayLikeToArray2, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -4999,8 +4989,33 @@ var _typeof_1 = createCommonjsModule(function(module) {
   }
   module.exports = _typeof2, module.exports.__esModule = true, module.exports["default"] = module.exports;
 });
+var toPrimitive = createCommonjsModule(function(module) {
+  var _typeof2 = _typeof_1["default"];
+  function _toPrimitive(input, hint) {
+    if (_typeof2(input) !== "object" || input === null)
+      return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== void 0) {
+      var res = prim.call(input, hint || "default");
+      if (_typeof2(res) !== "object")
+        return res;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (hint === "string" ? String : Number)(input);
+  }
+  module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+});
+var toPropertyKey = createCommonjsModule(function(module) {
+  var _typeof2 = _typeof_1["default"];
+  function _toPropertyKey2(arg) {
+    var key = toPrimitive(arg, "string");
+    return _typeof2(key) === "symbol" ? key : String(key);
+  }
+  module.exports = _toPropertyKey2, module.exports.__esModule = true, module.exports["default"] = module.exports;
+});
 var defineProperty = createCommonjsModule(function(module) {
   function _defineProperty2(obj, key, value) {
+    key = toPropertyKey(key);
     if (key in obj) {
       Object.defineProperty(obj, key, {
         value,
