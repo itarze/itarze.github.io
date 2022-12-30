@@ -6,7 +6,7 @@ import {
   BuiltInKeycodeModule,
   getLightingDefinition,
   KeycodeType
-} from "../../_snowpack/pkg/via-reader.js";
+} from "../../_snowpack/pkg/@the-via/reader.js";
 export function isAlpha(label) {
   return /[A-Za-z]/.test(label) && label.length === 1;
 }
@@ -26,45 +26,38 @@ export function getByteForCode(code, basicKeyToByte) {
   if (byte !== void 0) {
     return byte;
   } else if (isLayerCode(code)) {
-    return getByteForLayerCode(code);
+    return getByteForLayerCode(code, basicKeyToByte);
   } else if (advancedStringToKeycode(code, basicKeyToByte) !== null) {
     return advancedStringToKeycode(code, basicKeyToByte);
   }
   throw `Could not find byte for ${code}`;
 }
-const QK_MO = 20736;
-const QK_TO = 20480;
-const QK_OSL = 21504;
-const QK_TG = 21248;
-const QK_TT = 22528;
-const QK_DF = 20992;
-const ON_PRESS = 1;
 function isLayerCode(code) {
   return /([A-Za-z]+)\((\d+)\)/.test(code);
 }
-function getByteForLayerCode(keycode) {
+function getByteForLayerCode(keycode, basicKeyToByte) {
   const keycodeMatch = keycode.match(/([A-Za-z]+)\((\d+)\)/);
   if (keycodeMatch) {
     const [, code, layer] = keycodeMatch;
     const numLayer = parseInt(layer);
     switch (code) {
-      case "MO": {
-        return QK_MO | numLayer;
-      }
-      case "TG": {
-        return QK_TG | numLayer;
-      }
       case "TO": {
-        return QK_TO | ON_PRESS << 4 | numLayer & 15;
+        return Math.min(basicKeyToByte.QK_TO + numLayer, basicKeyToByte.QK_TO_MAX);
       }
-      case "TT": {
-        return QK_TT | numLayer;
+      case "MO": {
+        return Math.min(basicKeyToByte.QK_MOMENTARY + numLayer, basicKeyToByte.QK_MOMENTARY_MAX);
       }
       case "DF": {
-        return QK_DF | numLayer;
+        return Math.min(basicKeyToByte.QK_DEF_LAYER + numLayer, basicKeyToByte.QK_DEF_LAYER_MAX);
+      }
+      case "TG": {
+        return Math.min(basicKeyToByte.QK_TOGGLE_LAYER + numLayer, basicKeyToByte.QK_TOGGLE_LAYER_MAX);
       }
       case "OSL": {
-        return QK_OSL | numLayer;
+        return Math.min(basicKeyToByte.QK_ONE_SHOT_LAYER + numLayer, basicKeyToByte.QK_ONE_SHOT_LAYER_MAX);
+      }
+      case "TT": {
+        return Math.min(basicKeyToByte.QK_LAYER_TAP_TOGGLE + numLayer, basicKeyToByte.QK_LAYER_TAP_TOGGLE_MAX);
       }
       default: {
         throw new Error("Incorrect code");
@@ -73,21 +66,25 @@ function getByteForLayerCode(keycode) {
   }
   throw new Error("No match found");
 }
-function getCodeForLayerByte(byte) {
-  const layer = byte & 255;
-  if (QK_MO <= byte && (QK_MO | 255) >= byte) {
+function getCodeForLayerByte(byte, basicKeyToByte) {
+  if (basicKeyToByte.QK_TO <= byte && basicKeyToByte.QK_TO_MAX >= byte) {
+    const layer = byte - basicKeyToByte.QK_TO;
+    return `TO(${layer})`;
+  } else if (basicKeyToByte.QK_MOMENTARY <= byte && basicKeyToByte.QK_MOMENTARY_MAX >= byte) {
+    const layer = byte - basicKeyToByte.QK_MOMENTARY;
     return `MO(${layer})`;
-  } else if (QK_TO <= byte && (QK_TO | 255) >= byte) {
-    const layer2 = byte & 15;
-    return `TO(${layer2})`;
-  } else if (QK_OSL <= byte && (QK_OSL | 255) >= byte) {
-    return `OSL(${layer})`;
-  } else if (QK_TG <= byte && (QK_TG | 255) >= byte) {
-    return `TG(${layer})`;
-  } else if (QK_TT <= byte && (QK_TT | 255) >= byte) {
-    return `TT(${layer})`;
-  } else if (QK_DF <= byte && (QK_DF | 255) >= byte) {
+  } else if (basicKeyToByte.QK_DEF_LAYER <= byte && basicKeyToByte.QK_DEF_LAYER_MAX >= byte) {
+    const layer = byte - basicKeyToByte.QK_DEF_LAYER;
     return `DF(${layer})`;
+  } else if (basicKeyToByte.QK_TOGGLE_LAYER <= byte && basicKeyToByte.QK_TOGGLE_LAYER_MAX >= byte) {
+    const layer = byte - basicKeyToByte.QK_TOGGLE_LAYER;
+    return `TG(${layer})`;
+  } else if (basicKeyToByte.QK_ONE_SHOT_LAYER <= byte && basicKeyToByte.QK_ONE_SHOT_LAYER_MAX >= byte) {
+    const layer = byte - basicKeyToByte.QK_ONE_SHOT_LAYER;
+    return `OSL(${layer})`;
+  } else if (basicKeyToByte.QK_LAYER_TAP_TOGGLE <= byte && basicKeyToByte.QK_LAYER_TAP_TOGGLE_MAX >= byte) {
+    const layer = byte - basicKeyToByte.QK_LAYER_TAP_TOGGLE;
+    return `TT(${layer})`;
   }
 }
 export const keycodesList = getKeycodes().reduce((p, n) => p.concat(n.keycodes), []);
@@ -102,12 +99,22 @@ export const getByteToKey = (basicKeyToByte) => Object.keys(basicKeyToByte).redu
   }
   return {...p, [key]: n};
 }, {});
+function isLayerKey(byte, basicKeyToByte) {
+  return [
+    [basicKeyToByte.QK_TO, basicKeyToByte.QK_TO_MAX],
+    [basicKeyToByte.QK_MOMENTARY, basicKeyToByte.QK_MOMENTARY_MAX],
+    [basicKeyToByte.QK_DEF_LAYER, basicKeyToByte.QK_DEF_LAYER_MAX],
+    [basicKeyToByte.QK_TOGGLE_LAYER, basicKeyToByte.QK_TOGGLE_LAYER_MAX],
+    [basicKeyToByte.QK_ONE_SHOT_LAYER, basicKeyToByte.QK_ONE_SHOT_LAYER_MAX],
+    [basicKeyToByte.QK_LAYER_TAP_TOGGLE, basicKeyToByte.QK_LAYER_TAP_TOGGLE_MAX]
+  ].some((code) => byte >= code[0] && byte <= code[1]);
+}
 export function getCodeForByte(byte, basicKeyToByte, byteToKey) {
   const keycode = byteToKey[byte];
   if (keycode) {
     return keycode;
-  } else if (isLayerKey(byte)) {
-    return getCodeForLayerByte(byte);
+  } else if (isLayerKey(byte, basicKeyToByte)) {
+    return getCodeForLayerByte(byte, basicKeyToByte);
   } else if (advancedKeycodeToString(byte, basicKeyToByte, byteToKey) !== null) {
     return advancedKeycodeToString(byte, basicKeyToByte, byteToKey);
   } else {
@@ -527,9 +534,6 @@ export function mapEvtToKeycode(evt) {
       console.error("Unreacheable keydown code", evt);
   }
 }
-function isLayerKey(byte) {
-  return [QK_DF, QK_MO, QK_OSL, QK_TG, QK_TO, QK_TT].some((code) => byte >= code && byte <= (code | 255));
-}
 export function getKeycodeForByte(byte, basicKeyToByte, byteToKey) {
   const keycode = byteToKey[byte];
   const basicKeycode = keycodesList.find(({code}) => code === keycode);
@@ -537,7 +541,7 @@ export function getKeycodeForByte(byte, basicKeyToByte, byteToKey) {
   return basicKeycode && basicKeycode.code || advancedString || keycode;
 }
 export function getOtherMenu(basicKeyToByte) {
-  const keycodes = Object.keys(basicKeyToByte).filter((key) => !keycodesList.map(({code}) => code).includes(key)).map((code) => ({
+  const keycodes = Object.keys(basicKeyToByte).filter((key) => !key.startsWith("QK_")).filter((key) => !keycodesList.map(({code}) => code).includes(key)).map((code) => ({
     name: code.replace("KC_", "").replace(/_/g, " "),
     code
   }));
@@ -617,6 +621,13 @@ export function buildLayerMenu() {
         type: "layer",
         layer: 0,
         title: "Turn on layer when pressed"
+      },
+      {
+        name: "DF",
+        code: "DF(layer)",
+        type: "layer",
+        layer: 0,
+        title: "Sets the default layer"
       }
     ]
   };

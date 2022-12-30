@@ -1,18 +1,18 @@
 import React, {useState, useRef, useEffect} from "../../../_snowpack/pkg/react.js";
 import {FontAwesomeIcon} from "../../../_snowpack/pkg/@fortawesome/react-fontawesome.js";
 import {faPlus} from "../../../_snowpack/pkg/@fortawesome/free-solid-svg-icons.js";
-import useResize from "../../../_snowpack/pkg/react-resize-observer-hook.js";
+import {useSize} from "../../utils/use-size.js";
 import styled from "../../../_snowpack/pkg/styled-components.js";
 import ChippyLoader from "../chippy-loader.js";
 import LoadingText from "../loading-text.js";
-import {Pane as DefaultPane} from "./pane.js";
+import {ConfigureBasePane} from "./pane.js";
 import ReactTooltip from "../../../_snowpack/pkg/react-tooltip.js";
 import {
   CustomFeaturesV2,
   getLightingDefinition,
   isVIADefinitionV2,
   isVIADefinitionV3
-} from "../../../_snowpack/pkg/via-reader.js";
+} from "../../../_snowpack/pkg/@the-via/reader.js";
 import {PositionedKeyboard} from "../positioned-keyboard.js";
 import {Grid, Row, FlexCell, IconContainer, MenuCell} from "./grid.js";
 import * as Keycode from "./configure-panes/keycode.js";
@@ -38,11 +38,6 @@ import {getV3MenuComponents} from "../../store/menusSlice.js";
 import {getIsMacroFeatureSupported} from "../../store/macrosSlice.js";
 import {getConnectedDevices, getSupportedIds} from "../../store/devicesSlice.js";
 import {isElectron} from "../../utils/running-context.js";
-const Pane = styled(DefaultPane)`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-`;
 const MenuContainer = styled.div`
   padding: 15px 30px 20px 10px;
 `;
@@ -144,7 +139,7 @@ export const ConfigurePane = () => {
   const selectedDefinition = useAppSelector(getSelectedDefinition);
   const loadProgress = useAppSelector(getLoadProgress);
   const showLoader = !selectedDefinition || loadProgress !== 1;
-  return /* @__PURE__ */ React.createElement(Pane, null, showLoader ? /* @__PURE__ */ React.createElement(Loader, {
+  return /* @__PURE__ */ React.createElement(ConfigureBasePane, null, showLoader ? /* @__PURE__ */ React.createElement(Loader, {
     ...{
       loadProgress,
       selectedDefinition: selectedDefinition ? selectedDefinition : null
@@ -155,15 +150,8 @@ const ConfigureGrid = () => {
   var _a, _b;
   const dispatch = useDispatch();
   const [selectedRow, setRow] = useState(0);
-  const [dimensions, setDimensions] = useState({
-    width: 1280,
-    height: 900
-  });
   const flexRef = useRef(null);
-  useResize(flexRef, (entry) => flexRef.current && setDimensions({
-    width: entry.width,
-    height: entry.height
-  }));
+  const dimensions = useSize(flexRef);
   const KeyboardRows = getRowsForKeyboard();
   const SelectedPane = (_a = KeyboardRows[selectedRow]) == null ? void 0 : _a.Pane;
   const selectedTitle = (_b = KeyboardRows[selectedRow]) == null ? void 0 : _b.Title;

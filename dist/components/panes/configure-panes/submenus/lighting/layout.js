@@ -5,7 +5,7 @@ import {
   getLightingDefinition,
   isVIADefinitionV2,
   LightingValue
-} from "../../../../../../_snowpack/pkg/via-reader.js";
+} from "../../../../../../_snowpack/pkg/@the-via/reader.js";
 import {useDispatch} from "../../../../../../_snowpack/pkg/react-redux.js";
 import {
   getSelectedLightingData,

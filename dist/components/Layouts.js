@@ -30,7 +30,7 @@ function Layouts({
         key: name
       }, /* @__PURE__ */ React.createElement(Label, null, name), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentSelect, {
         onChange: (option) => {
-          if (option) {
+          if (option && option.label) {
             const optionIndex = options.indexOf(option.label);
             setSelectedOptionKeys((selectedOptions) => {
               selectedOptions[layoutKey] = optionIndex;

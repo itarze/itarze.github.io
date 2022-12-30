@@ -17,7 +17,7 @@ import {
   getLightingDefinition,
   isVIADefinitionV3,
   isVIADefinitionV2
-} from "../../../../_snowpack/pkg/via-reader.js";
+} from "../../../../_snowpack/pkg/@the-via/reader.js";
 import {OverflowCell, SubmenuOverflowCell, Row} from "../grid.js";
 import {getNextKey} from "../../positioned-keyboard.js";
 import {useDispatch} from "../../../../_snowpack/pkg/react-redux.js";
@@ -161,7 +161,7 @@ export const KeycodePane = () => {
   const renderCategories = (layerCount2) => {
     return /* @__PURE__ */ React.createElement(MenuContainer, null, getEnabledMenus(layerCount2).map(({label}) => /* @__PURE__ */ React.createElement(SubmenuRow, {
       selected: label === selectedCategory,
-      onClick: (_) => setSelectedCategory(label),
+      onClick: () => setSelectedCategory(label),
       key: label
     }, label)));
   };
@@ -199,15 +199,15 @@ export const KeycodePane = () => {
       key: code,
       disabled: !keycodeInMaster(code, basicKeyToByte) && code != "text",
       onClick: () => handleClick(code, index),
-      onMouseOver: (_) => setMouseOverDesc(title2 ? `${code}: ${title2}` : code),
-      onMouseOut: (_) => setMouseOverDesc(null)
+      onMouseOver: () => setMouseOverDesc(title2 ? `${code}: ${title2}` : code),
+      onMouseOut: () => setMouseOverDesc(null)
     }, /* @__PURE__ */ React.createElement("div", null, name));
   };
   const renderCustomKeycode = () => {
     return /* @__PURE__ */ React.createElement(CustomKeycode, {
       onClick: () => selectedKey !== null && handleClick("text", 0),
-      onMouseOver: (_) => setMouseOverDesc("Enter any QMK Keycode"),
-      onMouseOut: (_) => setMouseOverDesc(null)
+      onMouseOver: () => setMouseOverDesc("Enter any QMK Keycode"),
+      onMouseOut: () => setMouseOverDesc(null)
     }, "Any");
   };
   const renderSelectedCategory = (keycodes, selectedCategory2) => {

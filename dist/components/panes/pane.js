@@ -12,3 +12,8 @@ export const CenterPane = styled(Pane)`
   overflow: auto;
   display: block;
 `;
+export const ConfigureBasePane = styled(Pane)`
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+`;

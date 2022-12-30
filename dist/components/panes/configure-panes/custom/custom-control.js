@@ -48,7 +48,6 @@ export const VIACustomControl = (props) => {
         };
       });
       return /* @__PURE__ */ React.createElement(AccentSelect, {
-        width: 250,
         onChange: (option) => option && props.updateValue(name, ...command, +option.value),
         options: selectOptions,
         defaultValue: selectOptions.find((p) => value[0] === p.value)

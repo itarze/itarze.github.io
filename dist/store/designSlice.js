@@ -1,6 +1,6 @@
 import {createSlice} from "../../_snowpack/pkg/@reduxjs/toolkit.js";
 const initialState = {
-  selectedVersion: "v2"
+  selectedVersion: "v3"
 };
 const designSlice = createSlice({
   name: "design",

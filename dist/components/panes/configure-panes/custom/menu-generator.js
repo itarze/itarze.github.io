@@ -11,7 +11,7 @@ import {OverflowCell, SubmenuCell, SubmenuRow} from "../../grid.js";
 import {CenterPane} from "../../pane.js";
 import {title, component} from "../../../icons/lightbulb.js";
 import {VIACustomItem} from "./custom-control.js";
-import {evalExpr} from "../../../../../_snowpack/pkg/pelpi.js";
+import {evalExpr} from "../../../../../_snowpack/pkg/@the-via/pelpi.js";
 import {useAppSelector} from "../../../../store/hooks.js";
 import {getSelectedDefinition} from "../../../../store/definitionsSlice.js";
 import {
@@ -89,7 +89,7 @@ export const Pane = (props) => {
   }
   return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(SubmenuCell, null, /* @__PURE__ */ React.createElement(MenuContainer, null, menus.map((menu) => /* @__PURE__ */ React.createElement(SubmenuRow, {
     selected: selectedCategory.label === menu.label,
-    onClick: (_) => setSelectedCategory(menu),
+    onClick: () => setSelectedCategory(menu),
     key: menu.label
   }, menu.label)))), /* @__PURE__ */ React.createElement(OverflowCell, null, /* @__PURE__ */ React.createElement(CustomPane, null, /* @__PURE__ */ React.createElement(Container, null, SelectedMenu(childProps)))));
 };

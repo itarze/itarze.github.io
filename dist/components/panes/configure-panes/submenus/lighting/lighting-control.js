@@ -45,7 +45,6 @@ export const LightingControl = (props) => {
         label: label2
       }));
       return /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, labelContent), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentSelect, {
-        width: 250,
         onChange: (option) => {
           if (option) {
             dispatch(updateBacklightValue(command, +option.value));

@@ -1,6 +1,7 @@
-import {p as propTypes$3} from "./common/index-8ab56611.js";
-import {r as react} from "./common/index-86c632b0.js";
-import {c as createCommonjsModule} from "./common/_commonjsHelpers-8c19dec8.js";
+import {p as propTypes$3} from "./common/index-ab2d6925.js";
+import {r as react} from "./common/index-e88e33af.js";
+import {c as createCommonjsModule} from "./common/_commonjsHelpers-eb5a497e.js";
+import {_ as __assign} from "./common/tslib.es6-6d64b8e3.js";
 /** @license React v17.0.2
  * react-is.production.min.js
  *
@@ -202,18 +203,6 @@ var i = function(e2, i2) {
     T.push({el: B2, top: G2, left: J});
   }
   return T;
-};
-var __assign = function() {
-  __assign = Object.assign || function __assign2(t2) {
-    for (var s, i2 = 1, n2 = arguments.length; i2 < n2; i2++) {
-      s = arguments[i2];
-      for (var p2 in s)
-        if (Object.prototype.hasOwnProperty.call(s, p2))
-          t2[p2] = s[p2];
-    }
-    return t2;
-  };
-  return __assign.apply(this, arguments);
 };
 let idCounter = 0;
 function noop() {

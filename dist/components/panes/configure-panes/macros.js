@@ -35,7 +35,7 @@ export const Pane = () => {
   };
   const macroMenus = useMemo(() => Array(16).fill(0).map((_, idx) => idx).map((idx) => /* @__PURE__ */ React.createElement(SubmenuRow, {
     selected: selectedMacro === idx,
-    onClick: (_) => setSelectedMacro(idx),
+    onClick: () => setSelectedMacro(idx),
     key: idx
   }, `Macro ${idx}`)), [selectedMacro]);
   if (!selectedDevice) {

@@ -1,5 +1,4 @@
 import React, {useRef, useState, useEffect, useCallback} from "../../../_snowpack/pkg/react.js";
-import useResize from "../../../_snowpack/pkg/react-resize-observer-hook.js";
 import {Pane} from "./pane.js";
 import styled from "../../../_snowpack/pkg/styled-components.js";
 import {KeyboardValue} from "../../utils/keyboard-api.js";
@@ -35,6 +34,7 @@ import {
   getBasicKeyToByte
 } from "../../store/definitionsSlice.js";
 import TextInput from "../inputs/text-input.js";
+import {useSize} from "../../utils/use-size.js";
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -159,20 +159,13 @@ export const Debug = () => {
   const [selectedOptionKeys, setSelectedOptionKeys] = useState([]);
   const [selectedKey, setSelectedKey] = useState(0);
   const [showMatrix, setShowMatrix] = useState(false);
-  const [dimensions, setDimensions] = useState({
-    width: 1280,
-    height: 900
-  });
   const options = allDefinitions.map(([, definition], index) => ({
     label: definition.name,
     value: `${index}`
   }));
   const entry = allDefinitions[selectedDefinitionIndex];
   const flexRef = useRef(null);
-  useResize(flexRef, (entry2) => flexRef.current && setDimensions({
-    width: entry2.width,
-    height: entry2.height
-  }));
+  const dimensions = useSize(flexRef);
   return /* @__PURE__ */ React.createElement(DebugPane, null, /* @__PURE__ */ React.createElement(KeyboardPanel, {
     ref: flexRef
   }, entry && /* @__PURE__ */ React.createElement(BlankPositionedKeyboard, {

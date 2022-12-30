@@ -12,7 +12,7 @@ import {
   AdvancedLightingValues,
   AdvancedPane
 } from "./submenus/lighting/advanced.js";
-import {getLightingDefinition, isVIADefinitionV2} from "../../../../_snowpack/pkg/via-reader.js";
+import {getLightingDefinition, isVIADefinitionV2} from "../../../../_snowpack/pkg/@the-via/reader.js";
 import {useAppSelector} from "../../../store/hooks.js";
 import {getSelectedDefinition} from "../../../store/definitionsSlice.js";
 export const Category = {
@@ -50,7 +50,7 @@ export const Pane = () => {
   };
   return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(SubmenuCell, null, /* @__PURE__ */ React.createElement(MenuContainer, null, getMenus().map((menu) => /* @__PURE__ */ React.createElement(SubmenuRow, {
     selected: selectedCategory === menu,
-    onClick: (_) => setSelectedCategory(menu),
+    onClick: () => setSelectedCategory(menu),
     key: menu.label
   }, menu.label)))), /* @__PURE__ */ React.createElement(OverflowCell, null, /* @__PURE__ */ React.createElement(LightingPane, null, /* @__PURE__ */ React.createElement(Container, null, /* @__PURE__ */ React.createElement(selectedCategory.Menu, null)))));
 };

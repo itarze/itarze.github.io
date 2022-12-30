@@ -52,8 +52,9 @@ export function validateMacroExpressionV11(expression) {
   };
 }
 export class MacroAPIV11 {
-  constructor(keyboardApi, byteToKey) {
+  constructor(keyboardApi, basicKeyToByte, byteToKey) {
     this.keyboardApi = keyboardApi;
+    this.basicKeyToByte = basicKeyToByte;
     this.byteToKey = byteToKey;
   }
   async readMacroExpressions() {
@@ -140,7 +141,7 @@ export class MacroAPIV11 {
             throw new Error("Syntax error: KeyAction block must end with '}'");
           }
           const block = expression.substr(i + 1, keyActionEnd - i - 1);
-          if (/\d+/.test(block)) {
+          if (/^\d+$/.test(block)) {
             bytes.push(KeyActionPrefix, KeyAction.Delay, ...block.split("").map((char2) => char2.charCodeAt(0)), DelayTerminator);
           } else {
             const keycodes = block.split(",").map((keycode) => keycode.trim()).filter((keycode) => keycode.length);
@@ -148,14 +149,14 @@ export class MacroAPIV11 {
               case 0:
                 throw new Error("Syntax error: Keycodes expected within block. Use \\{} to define literal {}");
               case 1:
-                bytes.push(...buildKeyActionBytes(KeyAction.Tap, keycodes[0]));
+                bytes.push(...buildKeyActionBytes(this.basicKeyToByte, KeyAction.Tap, keycodes[0]));
                 break;
               default:
                 keycodes.forEach((keycode) => {
-                  bytes.push(...buildKeyActionBytes(KeyAction.Down, keycode));
+                  bytes.push(...buildKeyActionBytes(this.basicKeyToByte, KeyAction.Down, keycode));
                 });
                 keycodes.reverse().forEach((keycode) => {
-                  bytes.push(...buildKeyActionBytes(KeyAction.Up, keycode));
+                  bytes.push(...buildKeyActionBytes(this.basicKeyToByte, KeyAction.Up, keycode));
                 });
                 break;
             }

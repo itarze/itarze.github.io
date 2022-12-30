@@ -1,5 +1,4 @@
 import React, {useState, useRef, useMemo} from "../../../_snowpack/pkg/react.js";
-import useResize from "../../../_snowpack/pkg/react-resize-observer-hook.js";
 import {Pane} from "./pane.js";
 import styled from "../../../_snowpack/pkg/styled-components.js";
 import {ErrorMessage} from "../styled.js";
@@ -17,7 +16,7 @@ import {
   keyboardDefinitionV3ToVIADefinitionV3,
   isVIADefinitionV3,
   isKeyboardDefinitionV3
-} from "../../../_snowpack/pkg/via-reader.js";
+} from "../../../_snowpack/pkg/@the-via/reader.js";
 import {BlankPositionedKeyboard} from "../positioned-keyboard.js";
 import {
   ControlRow,
@@ -34,6 +33,7 @@ import {reloadConnectedDevices} from "../../store/devicesThunks.js";
 import {useAppSelector} from "../../store/hooks.js";
 import {getCustomDefinitions, loadDefinition} from "../../store/definitionsSlice.js";
 import {getSelectedVersion, selectVersion} from "../../store/designSlice.js";
+import {useSize} from "../../utils/use-size.js";
 const DesignErrorMessage = styled(ErrorMessage)`
   margin: 0;
   font-style: italic;
@@ -140,20 +140,13 @@ export const DesignTab = () => {
   const [selectedOptionKeys, setSelectedOptionKeys] = useState([]);
   const [showMatrix, setShowMatrix] = useState(false);
   const [errors, setErrors] = useState([]);
-  const [dimensions, setDimensions] = useState({
-    width: 1280,
-    height: 900
-  });
   const versionDefinitions = useMemo(() => localDefinitions.filter((definitionMap) => definitionMap[definitionVersion]), [localDefinitions, definitionVersion]);
   const options = versionDefinitions.map((definitionMap, index) => ({
     label: definitionMap[definitionVersion].name,
     value: index.toString()
   }));
   const flexRef = useRef(null);
-  useResize(flexRef, (entry) => flexRef.current && setDimensions({
-    width: entry.width,
-    height: entry.height
-  }));
+  const dimensions = useSize(flexRef);
   const definition = versionDefinitions[selectedDefinitionIndex] && versionDefinitions[selectedDefinitionIndex][definitionVersion];
   return /* @__PURE__ */ React.createElement(DesignPane, {
     onDragOver: (evt) => {
@@ -181,9 +174,9 @@ export const DesignTab = () => {
     icon: faUpload
   }))), /* @__PURE__ */ React.createElement(OverflowCell, null, /* @__PURE__ */ React.createElement(Container, null, /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, "Load Draft Definition"), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentUploadButton, {
     onLoad: (file) => importDefinition(file, definitionVersion, dispatch, setErrors)
-  }, "Load"))), /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, "Use V3 definitions (via/next)"), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentSlider, {
-    isChecked: definitionVersion === "v3",
-    onChange: (val) => dispatch(selectVersion(val ? "v3" : "v2"))
+  }, "Load"))), /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, "Use V2 definitions (deprecated)"), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentSlider, {
+    isChecked: definitionVersion === "v2",
+    onChange: (val) => dispatch(selectVersion(val ? "v2" : "v3"))
   }))), definition && /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, "Shown Keyboard Definition"), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentSelect, {
     onChange: (option) => {
       setSelectedOptionKeys(() => []);

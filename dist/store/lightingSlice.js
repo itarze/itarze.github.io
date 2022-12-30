@@ -3,7 +3,7 @@ import {
   getLightingDefinition,
   isVIADefinitionV2,
   LightingValue
-} from "../../_snowpack/pkg/via-reader.js";
+} from "../../_snowpack/pkg/@the-via/reader.js";
 import {getSelectedDefinition} from "./definitionsSlice.js";
 import {
   getSelectedConnectedDevice,

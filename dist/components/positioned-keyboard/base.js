@@ -53,7 +53,7 @@ export const KeyContainer = styled.div`
   transition: transform 0.2s ease-out;
   user-select: none;
   transform: ${(props) => props.selected ? "translate3d(0, -4px, 0) scale(0.99)" : "translate3d(0,0,0)"};
-  :hover {
+  &:hover {
     transform: ${(props) => props.selected ? "translate3d(0, -4px, 0) scale(0.99)" : "translate3d(0,-4px,0)"};
   }
   animation-name: select-glow;

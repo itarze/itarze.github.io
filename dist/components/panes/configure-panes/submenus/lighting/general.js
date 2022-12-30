@@ -5,7 +5,7 @@ import {
   getLightingDefinition,
   isVIADefinitionV2,
   LightingValue
-} from "../../../../../../_snowpack/pkg/via-reader.js";
+} from "../../../../../../_snowpack/pkg/@the-via/reader.js";
 import {LightingControl} from "./lighting-control.js";
 import {useDispatch} from "../../../../../../_snowpack/pkg/react-redux.js";
 import {useAppSelector} from "../../../../../store/hooks.js";

@@ -22,7 +22,6 @@ const LayoutControl = (props) => {
       value: `${idx}`
     }));
     return /* @__PURE__ */ React.createElement(ControlRow, null, /* @__PURE__ */ React.createElement(Label, null, label), /* @__PURE__ */ React.createElement(Detail, null, /* @__PURE__ */ React.createElement(AccentSelect, {
-      width: 150,
       defaultValue: options[selectedOption],
       options,
       onChange: (option) => {

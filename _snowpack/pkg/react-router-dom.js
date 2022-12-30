@@ -1,11 +1,10 @@
-import {_ as _inheritsLoose, c as createBrowserHistory, R as Router, a as createHashHistory, b as context, i as invariant, d as createLocation, e as createPath, m as matchPath} from "./common/react-router-76b27ad3.js";
-export {f as Route, S as Switch} from "./common/react-router-76b27ad3.js";
-import {r as react} from "./common/index-86c632b0.js";
+import {_ as _inheritsLoose, c as createBrowserHistory, R as Router, a as createHashHistory, b as context, i as invariant, d as createLocation, e as createPath, m as matchPath} from "./common/react-router-9c33bb37.js";
+export {f as Route, S as Switch} from "./common/react-router-9c33bb37.js";
+import {r as react} from "./common/index-e88e33af.js";
 import {b as _objectWithoutPropertiesLoose, a as _extends} from "./common/setPrototypeOf-c24b3786.js";
-import "./common/index-8ab56611.js";
-import "./common/_commonjsHelpers-8c19dec8.js";
-import "./common/index-6bd1d6e3.js";
-import "./common/hoist-non-react-statics.cjs-ec82709f.js";
+import "./common/index-ab2d6925.js";
+import "./common/_commonjsHelpers-eb5a497e.js";
+import "./common/hoist-non-react-statics.cjs-a2debb71.js";
 var BrowserRouter = /* @__PURE__ */ function(_React$Component) {
   _inheritsLoose(BrowserRouter2, _React$Component);
   function BrowserRouter2() {

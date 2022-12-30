@@ -41,8 +41,9 @@ export function validateMacroExpression(expression) {
   };
 }
 export class MacroAPI {
-  constructor(keyboardApi, byteToKey) {
+  constructor(keyboardApi, basicKeyToByte, byteToKey) {
     this.keyboardApi = keyboardApi;
+    this.basicKeyToByte = basicKeyToByte;
     this.byteToKey = byteToKey;
   }
   async readMacroExpressions() {
@@ -114,16 +115,16 @@ export class MacroAPI {
               throw new Error("Syntax error: Keycodes expected within block. Use \\{} to define literal {}");
             case 1:
               bytes.push(KeyAction.Tap);
-              bytes.push(getByte(keycodes[0]));
+              bytes.push(getByte(this.basicKeyToByte, keycodes[0]));
               break;
             default:
               keycodes.forEach((keycode) => {
                 bytes.push(KeyAction.Down);
-                bytes.push(getByte(keycode));
+                bytes.push(getByte(this.basicKeyToByte, keycode));
               });
               keycodes.reverse().forEach((keycode) => {
                 bytes.push(KeyAction.Up);
-                bytes.push(getByte(keycode));
+                bytes.push(getByte(this.basicKeyToByte, keycode));
               });
               break;
           }

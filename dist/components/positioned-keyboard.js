@@ -11,7 +11,7 @@ import {
   isMacro,
   getShortNameForKeycode
 } from "../utils/key.js";
-import {getBoundingBox} from "../../_snowpack/pkg/via-reader.js";
+import {getBoundingBox} from "../../_snowpack/pkg/@the-via/reader.js";
 import {getThemeFromStore} from "../utils/device-store.js";
 import {useAppSelector} from "../store/hooks.js";
 import {

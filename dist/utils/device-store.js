@@ -1,6 +1,6 @@
 import {
   getTheme
-} from "../../_snowpack/pkg/via-reader.js";
+} from "../../_snowpack/pkg/@the-via/reader.js";
 import {Store} from "../shims/via-app-store.js";
 import {getVendorProductId} from "./hid-keyboards.js";
 let deviceStore;

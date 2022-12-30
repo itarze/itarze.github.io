@@ -1,7 +1,5 @@
-import React, {useState, useEffect} from "../../../_snowpack/pkg/react.js";
+import React, {useState, useEffect, useRef} from "../../../_snowpack/pkg/react.js";
 import fullKeyboardDefinition from "../../utils/test-keyboard-definition.json.proxy.js";
-import rafSchd from "../../../_snowpack/pkg/raf-schd.js";
-import useResizeObserver from "../../../_snowpack/pkg/use-resize-observer.js";
 import {Pane} from "./pane.js";
 import styled from "../../../_snowpack/pkg/styled-components.js";
 import {PROTOCOL_GAMMA, KeyboardValue} from "../../utils/keyboard-api.js";
@@ -28,6 +26,7 @@ import {
   getIsTestMatrixEnabled,
   setTestMatrixEnabled
 } from "../../store/settingsSlice.js";
+import {useSize} from "../../utils/use-size.js";
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -48,10 +47,6 @@ export const Test = () => {
   const selectedDefinition = useAppSelector(getSelectedDefinition);
   const keyDefinitions = useAppSelector(getSelectedKeyDefinitions);
   const isTestMatrixEnabled = useAppSelector(getIsTestMatrixEnabled);
-  const [dimensions, setDimensions] = useState({
-    width: 0,
-    height: 0
-  });
   const [selectedKeys, setSelectedKeys] = useState({});
   let flat = [];
   function downHandler(evt) {
@@ -126,16 +121,8 @@ export const Test = () => {
       dispatch(setTestMatrixEnabled(false));
     };
   }, []);
-  const onFlexResize = React.useCallback(({width, height}) => {
-    if (width !== void 0 && height !== void 0)
-      setDimensions({
-        width,
-        height
-      });
-  }, [setDimensions]);
-  const {ref: flexRef} = useResizeObserver({
-    onResize: rafSchd(onFlexResize)
-  });
+  const flexRef = useRef(null);
+  const dimensions = useSize(flexRef);
   const hasTestMatrixDevice = selectedDevice && selectedDefinition && keyDefinitions;
   const canUseMatrixState = hasTestMatrixDevice && PROTOCOL_GAMMA <= selectedDevice.protocol;
   const api = selectedDevice && selectedDevice.api;
