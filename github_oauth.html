@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head><title>VIA</title></head><body><script>const authFn = async () => {
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>VIA</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      const authFn = async () => {
         const params = new URLSearchParams(window.location.search)
         const code = params.get('code')
         const state = params.get('state')
@@ -14,4 +21,7 @@
         }
         window.close()
     }
-    authFn()</script></body></html>
+    authFn()
+    </script>
+  </body>
+</html>
